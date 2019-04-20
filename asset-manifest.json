@@ -1,14 +1,13 @@
 {
-  "main.css": "/ducks/static/css/main.c2646414.chunk.css",
-  "main.js": "/ducks/static/js/main.c0cc79a3.chunk.js",
-  "main.js.map": "/ducks/static/js/main.c0cc79a3.chunk.js.map",
+  "main.css": "/ducks/static/css/main.abc3d5bf.chunk.css",
+  "main.js": "/ducks/static/js/main.724e3cc6.chunk.js",
+  "main.js.map": "/ducks/static/js/main.724e3cc6.chunk.js.map",
   "runtime~main.js": "/ducks/static/js/runtime~main.11ce8b69.js",
   "runtime~main.js.map": "/ducks/static/js/runtime~main.11ce8b69.js.map",
-  "static/js/2.6efc73d3.chunk.js": "/ducks/static/js/2.6efc73d3.chunk.js",
-  "static/js/2.6efc73d3.chunk.js.map": "/ducks/static/js/2.6efc73d3.chunk.js.map",
+  "static/js/2.b97dbfef.chunk.js": "/ducks/static/js/2.b97dbfef.chunk.js",
+  "static/js/2.b97dbfef.chunk.js.map": "/ducks/static/js/2.b97dbfef.chunk.js.map",
   "index.html": "/ducks/index.html",
-  "precache-manifest.6d9749a2faba77f3934c08f19fa921a3.js": "/ducks/precache-manifest.6d9749a2faba77f3934c08f19fa921a3.js",
+  "precache-manifest.2fed5736412a163086a8352fdfe0b7fa.js": "/ducks/precache-manifest.2fed5736412a163086a8352fdfe0b7fa.js",
   "service-worker.js": "/ducks/service-worker.js",
-  "static/css/main.c2646414.chunk.css.map": "/ducks/static/css/main.c2646414.chunk.css.map",
-  "static/media/logo.svg": "/ducks/static/media/logo.5d5d9eef.svg"
+  "static/css/main.abc3d5bf.chunk.css.map": "/ducks/static/css/main.abc3d5bf.chunk.css.map"
 }
