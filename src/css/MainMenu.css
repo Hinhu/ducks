@@ -1,0 +1,14 @@
+.option{
+  margin:15px; 
+  text-decoration: none;
+  font-family: 'Press Start 2P', cursive;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 48px;
+  line-height: normal;
+  text-align: center;
+
+  color: white;
+
+  text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black;
+}
