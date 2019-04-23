@@ -3,15 +3,18 @@ import React, { Component } from 'react';
 class GameCanvas extends Component{
     constructor(){
         super();
+        this.DUCKS_BASE_NUM = 4;
         this.state = {
             backgroundColor: "green",
             width: 700,
             height: 420,
-            duck: {
-                x: 700,
+            level: 1,
+            ducks: [],
+            /*duck: {
+                x: 700+Math.floor(Math.random()*10),
                 y: 100,
                 speed: 2.5
-            }
+            }*/
         };
         
     }
@@ -23,6 +26,7 @@ class GameCanvas extends Component{
 
     componentDidMount(){
         this.initCanvas(this.state, this.refs.canvas.getContext('2d'));
+        this.initDucks(this.state);
         requestAnimationFrame(()=>{
             this.loop();
         });
@@ -30,6 +34,19 @@ class GameCanvas extends Component{
 
     componentDidUpdate(){
         this.updateCanvas(this.state);
+    }
+
+    initDucks(state){
+        let ducksArray = [];
+        for(let i=0; i<this.DUCKS_BASE_NUM+2*state.level; i++)
+            ducksArray.push({
+                x: state.width+Math.floor(Math.random()*70+i*200+40*state.level),
+                y: Math.floor(Math.random()*100+20),
+                speed: Math.floor(Math.random()*0.05*state.level+0.2*state.level+1.2)
+            });
+        this.setState({
+            ducks: ducksArray
+        });
     }
 
     initImages(state, context){
@@ -57,18 +74,39 @@ class GameCanvas extends Component{
         //console.log('update canvas');
         var context = this.refs.canvas.getContext('2d');
         context.drawImage(this.backgroundImg, 0, 0);
-        context.drawImage(this.duckImg, state.duck.x, state.duck.y);
+
+        state.ducks.forEach(element => {
+            context.drawImage(this.duckImg, element.x, element.y);
+        });
+        //context.drawImage(this.duckImg, state.duck.x, state.duck.y);
     }
 
     loop(){
         //console.log('loop: ', this.state.duck);
-        this.setState((state) => ({
-            duck: {
-                x: state.duck.x > - 60 ? state.duck.x - state.duck.speed : state.width,
-                y: state.duck.y,
-                speed: state.duck.speed
-            }
-        }));
+        this.setState((state) => {
+            const ducksArray = state.ducks.map(duck => ({
+                x: duck.x - duck.speed,
+                y: duck.y,
+                speed: duck.speed
+            }))
+
+            //const ducksOnScreen = state.ducks.filter(duck => duck.x > 0)
+
+            return {
+                ducks: ducksArray,    
+                //level: ducksOnScreen.length > 0 ? state.level : state.level+1
+            };
+        });
+        
+        if(this.state.ducks.filter(duck => duck.x > -100).length === 0){
+            this.setState((state) => ({
+                level: state.level+1
+            }))
+            this.initDucks(this.state)
+            console.log('leveled up', this.state.level)
+        }
+
+        
         requestAnimationFrame(this.loop.bind(this));
     }
 
