@@ -1,0 +1,16 @@
+.option{
+    cursor: pointer;
+}
+.danger{
+    font-size: 36px;
+    color: red;
+}
+.button-text{
+    font-size: 20px;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+.dialog-text{
+    margin-top:5px;
+    font-size: 26px;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}

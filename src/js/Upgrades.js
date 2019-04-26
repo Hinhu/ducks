@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Back from './Back.js'
 
 class Upgrades extends Component {
 	render() {
@@ -7,6 +8,7 @@ class Upgrades extends Component {
 				<div id="title">
                     UPGRADES
                 </div>
+				<Back />
 			</div>
 		);
 	}
