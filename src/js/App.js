@@ -9,6 +9,12 @@ import NotFound from './NotFound.js';
 
 
 class App extends Component {
+	componentDidMount(){
+		if(!localStorage.getItem('name')){
+			localStorage.setItem('name','PLAYER')
+		}
+	}
+
 	render() {
 		return (
 			<div>

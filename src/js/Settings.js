@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../css/Settings.css'
 import Back from './Back.js'
+import ChangeNameDialog from './ChangeNameDialog.js'
 import ResetRankingDialog from './ResetRankingDialog.js'
 import DeleteSaveDialog from './DeleteSaveDialog.js'
 import Grid from '@material-ui/core/Grid';
@@ -11,6 +12,7 @@ class Settings extends Component {
 		this.state = {
 			sound: localStorage.getItem("sound") || 'active',
 			map: localStorage.getItem("map") || 'forest',
+			openChangeNameDialog: false,
 			openResetRankingDialog: false,
 			openDeleteSaveDialog: false
 		}
@@ -61,6 +63,14 @@ class Settings extends Component {
 		this.setState({openDeleteSaveDialog:false})
 	}
 
+	openChangeNameDialog = () =>{
+		this.setState({openChangeNameDialog:true})
+	}
+
+	closeChangeNameDialog = () =>{
+		this.setState({openChangeNameDialog:false})
+	}
+
 
 	render() {
 		return (
@@ -94,6 +104,9 @@ class Settings extends Component {
 								</Grid>
 							</Grid>
 							<Grid item style={{marginTop:"30px"}} >
+								<div className="option" onClick={this.openChangeNameDialog}>
+									CHANGE NAME
+								</div>
 								<div className="danger option" onClick={this.openResetRankingDialog}>
 									RESET RANKING
 								</div>
@@ -105,6 +118,7 @@ class Settings extends Component {
 					</Grid>
 				</Grid>
 				<Back />
+				<ChangeNameDialog open={this.state.openChangeNameDialog} handleClose={this.closeChangeNameDialog}/>
 				<ResetRankingDialog open={this.state.openResetRankingDialog} handleClose={this.closeResetRankingDialog}/>
 				<DeleteSaveDialog open={this.state.openDeleteSaveDialog} handleClose={this.closeDeleteSaveDialog}/>
 			</div >

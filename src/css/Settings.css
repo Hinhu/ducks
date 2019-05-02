@@ -1,5 +1,6 @@
 .option{
     cursor: pointer;
+    user-select: none;
 }
 .danger{
     font-size: 36px;
@@ -13,4 +14,21 @@
     margin-top:5px;
     font-size: 26px;
     text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+    text-align: left;
+}
+
+.input{
+    margin-top: 10px;
+    border-top: 0;
+    border-left: 0;
+    border-bottom: 5px solid black;
+    border-right: 0;
+    font-family: 'Press Start 2P', cursive;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 26px;
+    color: white;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+    caret-color: black;
 }
