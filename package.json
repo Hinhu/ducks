@@ -4,12 +4,14 @@
   "private": true,
   "homepage": "https://hinhu.github.io/ducks/",
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
     "gh-pages": "^2.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "webfontloader": "^1.6.28"
   },
   "scripts": {
     "start": "react-scripts start",

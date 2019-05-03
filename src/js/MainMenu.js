@@ -12,26 +12,32 @@ class MainMenu extends Component {
                     <br></br>
                     HUNTER
                 </div>
-                <div class="center">
-                    <Link to="/game" className="option">
+                <div className="center">
+                    <div className="margin">
+                    <Link to="/game" className="link">
                         NEW GAME
                     </Link>
-                    <br></br>
-                    <Link to="/game" class="option">
+                    </div>
+                    <div className="margin">
+                    <Link to="/game" className="link">
                         CONTINUE
                     </Link>
-                    <br></br>
-                    <Link to="/upgrades" class="option">
+                    </div>
+                    <div className="margin">
+                    <Link to="/upgrades" className="link">
                         UPGRADES
                     </Link>
-                    <br></br>
-                    <Link to="/rank" class="option">
+                    </div>
+                    <div className="margin">
+                    <Link to="/rank" className="link">
                         RANKINGS
                     </Link>
-                    <br></br>
-                    <Link to="/settings" class="option">
+                    </div>
+                    <div className="margin">
+                    <Link to="/settings" className="link">
                         SETTINGS
                     </Link>
+                    </div>
                 </div>
             </div>
         );
