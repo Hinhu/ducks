@@ -10,6 +10,11 @@ class GameCanvas extends Component{
             height: 420,
             level: 1,
             ducks: [],
+            bow: {
+                x: 100,
+                y: 300,
+                rotation: 0
+            }
             /*duck: {
                 x: 700+Math.floor(Math.random()*10),
                 y: 100,
@@ -35,9 +40,9 @@ class GameCanvas extends Component{
         let ducksArray = [];
         for(let i=0; i<this.DUCKS_BASE_NUM+2*state.level; i++)
             ducksArray.push({
-                x: state.width+Math.floor(Math.random()*70+i*200+40*state.level),
-                y: Math.floor(Math.random()*100+20),
-                speed: Math.floor(Math.random()*0.05*state.level+0.2*state.level+1.2)
+                x: state.width+(Math.random()*70+i*200+40*state.level),
+                y: (Math.random()*100+20),
+                speed: (Math.random()*0.05*state.level+0.2*state.level+1.2)
             });
         this.setState({
             ducks: ducksArray
@@ -47,16 +52,20 @@ class GameCanvas extends Component{
     initImages(state, context){
         this.backgroundImg = new Image();
         this.duckImg = new Image();
+        this.bowImg = new Image();
         this.backgroundImg.src = require("../img/background-grass.png");
         this.duckImg.src = require("../img/duck.png");
+        this.bowImg.src = require("../img/bow.png");
         this.backgroundImg.onload = function() {
             context.clearRect(0,0,state.width, state.height);
             context.drawImage(this, 0, 0, state.width, state.height);
         };
-
         this.duckImg.onload = function(){
             //context.clearRect(0,0,state.width, state.height);
             context.drawImage(this, state.width-100, 100);
+        };
+        this.bowImg.onload = function(){
+            context.drawImage(this, 100, 100);
         };
     }
 
@@ -69,15 +78,27 @@ class GameCanvas extends Component{
         //console.log('update canvas');
         let context = this.refs.canvas.getContext('2d');
         context.drawImage(this.backgroundImg, 0, 0);
-
+        this.drawBow(context);
         state.ducks.forEach(element => {
             context.drawImage(this.duckImg, element.x, element.y);
         });
         //context.drawImage(this.duckImg, state.duck.x, state.duck.y);
     }
 
-    drawArrow(context){
+    handleMouse(event){
+        let bow = {...this.state.bow};
+        bow.rotation = event.screenY;
+        this.setState({bow})
+    }
 
+    drawBow(context){
+        context.save();
+        context.translate(this.state.bow.x*1.5, this.state.bow.y);
+        context.rotate(Math.PI/2*3+this.state.bow.rotation/200)
+        context.translate(-this.state.bow.x*1.5, -this.state.bow.y);
+        context.drawImage(this.bowImg, this.state.bow.x, this.state.bow.y);
+        
+        context.restore();
     }
 
     loop(){
@@ -113,7 +134,7 @@ class GameCanvas extends Component{
 
     render(){
         return (
-            <canvas width={this.state.width} height={this.state.height} ref="canvas"></canvas>
+            <canvas width={this.state.width} height={this.state.height} ref="canvas" onMouseMove={this.handleMouse.bind(this)}></canvas>
         );
     }
     
