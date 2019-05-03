@@ -18,11 +18,6 @@ class GameCanvas extends Component{
         };
         
     }
-    render(){
-        return (
-            <canvas width={this.state.width} height={this.state.height} ref="canvas"></canvas>
-        );
-    }
 
     componentDidMount(){
         this.initCanvas(this.state, this.refs.canvas.getContext('2d'));
@@ -72,13 +67,17 @@ class GameCanvas extends Component{
 
     updateCanvas(state){
         //console.log('update canvas');
-        var context = this.refs.canvas.getContext('2d');
+        let context = this.refs.canvas.getContext('2d');
         context.drawImage(this.backgroundImg, 0, 0);
 
         state.ducks.forEach(element => {
             context.drawImage(this.duckImg, element.x, element.y);
         });
         //context.drawImage(this.duckImg, state.duck.x, state.duck.y);
+    }
+
+    drawArrow(context){
+
     }
 
     loop(){
@@ -111,6 +110,12 @@ class GameCanvas extends Component{
     }
 
 
+
+    render(){
+        return (
+            <canvas width={this.state.width} height={this.state.height} ref="canvas"></canvas>
+        );
+    }
     
 }
 
