@@ -4,14 +4,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
 
-class DeleteSaveDialog extends Component {
+class UpgradeDialog extends Component {
 
-    resetRanking = () =>{
-        localStorage.removeItem("Turbo");
-        localStorage.removeItem("Super");
-        localStorage.removeItem("Ultra");
-        localStorage.setItem("cash",0);
-        this.props.handleClose();
+    confirmBuy = () =>{
+        let cash=parseInt(localStorage.getItem("cash"));
+        cash-=this.props.price;
+        localStorage.setItem('cash',cash);
+        localStorage.setItem(this.props.type,"true");
+        this.props.handleBuy();
     }
 
     render() {
@@ -23,12 +23,11 @@ class DeleteSaveDialog extends Component {
                 >
                     <DialogContent>
                         <div className="dialog-text">
-                            You will delete all your saved progress permanetly.
-                            Do you want to proceed?
+                            Are you sure you want to buy the {this.props.type} Bow?
                         </div>
                     </DialogContent>
                     <DialogActions>
-                        <div onClick={this.resetRanking} className="button-text option danger">
+                        <div onClick={this.confirmBuy} className="button-text option danger">
                             YES
                         </div>
                         <div onClick={this.props.handleClose} className="button-text option">
@@ -41,4 +40,4 @@ class DeleteSaveDialog extends Component {
     }
 }
 
-export default DeleteSaveDialog;
+export default UpgradeDialog;
