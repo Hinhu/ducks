@@ -13,6 +13,9 @@ class App extends Component {
 		if(!localStorage.getItem('name')){
 			localStorage.setItem('name','PLAYER')
 		}
+		if(!localStorage.getItem('cash')){
+			localStorage.setItem('cash',0)
+		}
 	}
 
 	render() {

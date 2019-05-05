@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-class Ranking extends Component {
-
+class Back extends Component {
 
     render() {
         return (
-            <div style={{ marginTop: "10vh" }} >
+            <div id="back-link" >
                 <Link to="/" className="link" >
                     BACK
                 </Link>
@@ -15,4 +14,4 @@ class Ranking extends Component {
     }
 }
 
-export default Ranking;
+export default Back;

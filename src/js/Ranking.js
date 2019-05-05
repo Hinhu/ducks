@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Rank from './Rank.js'
 import Back from './Back.js'
+import Greeter from './Greeter.js'
 
 class Ranking extends Component {
 
@@ -21,6 +22,7 @@ class Ranking extends Component {
 	render() {
 		return (
 			<div>
+				<Greeter />
 				<div id="title">
 					RANKING
             	</div>
