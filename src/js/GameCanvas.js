@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 class GameCanvas extends Component{
     constructor(){
         super();
+        this.GRAVITY = 0.420420;
         this.DUCKS_BASE_NUM = 4;
         this.state = {
             backgroundColor: "green",
@@ -13,15 +14,13 @@ class GameCanvas extends Component{
             bow: {
                 x: 100,
                 y: 300,
-                rotation: 0
-            }
-            /*duck: {
-                x: 700+Math.floor(Math.random()*10),
-                y: 100,
-                speed: 2.5
-            }*/
+                rotation: 0,
+                power: 0,
+                powerIncrease: 1.5,
+                isStretching: false,
+            },
+            arrows: []
         };
-        
     }
 
     componentDidMount(){
@@ -50,12 +49,20 @@ class GameCanvas extends Component{
     }
 
     initImages(state, context){
+        
+        
         this.backgroundImg = new Image();
         this.duckImg = new Image();
         this.bowImg = new Image();
-        this.backgroundImg.src = require("../img/background-grass.png");
+        this.arrowImg = new Image();
+        switch(localStorage.getItem("map")) {
+            case "lake": this.backgroundImg.src = require("../img/background-beach.png"); break;
+            case "city": this.backgroundImg.src = require("../img/background-dark.png"); break;
+            default: this.backgroundImg.src = require("../img/background-grass.png"); break;
+        }
         this.duckImg.src = require("../img/duck.png");
         this.bowImg.src = require("../img/bow.png");
+        this.arrowImg.src = require("../img/arrow.png");
         this.backgroundImg.onload = function() {
             context.clearRect(0,0,state.width, state.height);
             context.drawImage(this, 0, 0, state.width, state.height);
@@ -67,6 +74,10 @@ class GameCanvas extends Component{
         this.bowImg.onload = function(){
             context.drawImage(this, 100, 100);
         };
+        /*this.arrowImg.onload = function(){
+            context.drawImage(this, 200, 200);
+        }*/
+
     }
 
     initCanvas(state, context){
@@ -75,49 +86,120 @@ class GameCanvas extends Component{
     }
 
     updateCanvas(state){
-        //console.log('update canvas');
         let context = this.refs.canvas.getContext('2d');
         context.drawImage(this.backgroundImg, 0, 0);
         this.drawBow(context);
         state.ducks.forEach(element => {
             context.drawImage(this.duckImg, element.x, element.y);
         });
-        //context.drawImage(this.duckImg, state.duck.x, state.duck.y);
+        state.arrows.forEach(element => {
+            this.drawArrow(context, element);
+        })
+        if(this.state.bow.isStretching)
+            this.drawPowerBar(context);
     }
 
-    handleMouse(event){
+    handleMouseMove(event){
+        this.rotateBow(event);
+    }
+
+    handleMouseUp(event){
+        this.releaseArrow(event);
+    }
+    
+    handleMouseDown(event){
+        this.startStretching(event);
+    }
+
+    rotateBow(event){
         let bow = {...this.state.bow};
-        bow.rotation = event.screenY;
+        bow.rotation = this.calculateAngle(event.screenY);
         this.setState({bow})
+    }
+
+    releaseArrow(event){
+        let arrows = this.state.arrows;
+        let bow = {...this.state.bow};
+        let newArrow = {
+            x: 150,
+            y: 300,
+            vx: Math.sin(bow.rotation)*bow.power/2.5,
+            vy: Math.cos(bow.rotation)*bow.power/2.5,
+            rotation: this.state.bow.rotation,
+        };
+        arrows.push(newArrow);
+        bow.isStretching = false;
+        bow.power = 0;
+        this.setState({bow});
+        this.setState({arrows});
+        console.log(this.state)
+    }
+
+    startStretching(event){
+        let bow = {...this.state.bow};
+        bow.isStretching = true;
+        this.setState({bow});
     }
 
     drawBow(context){
         context.save();
         context.translate(this.state.bow.x*1.5, this.state.bow.y);
-        context.rotate(Math.PI/2*3+this.state.bow.rotation/200)
+        context.rotate(this.state.bow.rotation);
         context.translate(-this.state.bow.x*1.5, -this.state.bow.y);
         context.drawImage(this.bowImg, this.state.bow.x, this.state.bow.y);
-        
         context.restore();
     }
 
+    drawArrow(context, arrow){
+        context.save();
+        context.translate(arrow.x*1.0, arrow.y);
+        context.rotate(arrow.rotation);
+        context.translate(-arrow.x*1.0, -arrow.y);
+        context.drawImage(this.arrowImg, arrow.x, arrow.y);
+        context.restore();
+    }
+
+    drawPowerBar(context){
+        context.fillStyle = "#FF0000";
+        context.fillRect(200, 300, 20, 100);
+        context.fillStyle = "#000000";
+        context.fillRect(200, 300, 20, 100-this.state.bow.power);
+    }
+
+    calculateAngle(mouseY){
+        return Math.PI/24*41+mouseY/250;
+    }
+
     loop(){
-        //console.log('loop: ', this.state.duck);
         this.setState((state) => {
             const ducksArray = state.ducks.map(duck => ({
                 x: duck.x - duck.speed,
                 y: duck.y,
                 speed: duck.speed
             }))
-
-            //const ducksOnScreen = state.ducks.filter(duck => duck.x > 0)
-
+            const arrowsArray = state.arrows.map(arrow => ({
+                x: arrow.x + arrow.vx,
+                y: arrow.y - arrow.vy,
+                vy: arrow.vy - this.GRAVITY,
+                vx: arrow.vx,
+                rotation: Math.PI/2-(Math.atan(arrow.vy/Math.abs(arrow.vx)))
+            }))
             return {
-                ducks: ducksArray,    
-                //level: ducksOnScreen.length > 0 ? state.level : state.level+1
+                ducks: ducksArray, 
+                arrows: arrowsArray   
             };
         });
         
+        if(this.state.bow.isStretching){
+            let bow = {...this.state.bow};
+            if(bow.power > 100)
+                bow.power = 0;
+            else
+                bow.power += this.state.bow.powerIncrease;
+            
+            this.setState({bow});
+        }
+
         if(this.state.ducks.filter(duck => duck.x > -100).length === 0){
             this.setState((state) => ({
                 level: state.level+1
@@ -134,7 +216,10 @@ class GameCanvas extends Component{
 
     render(){
         return (
-            <canvas width={this.state.width} height={this.state.height} ref="canvas" onMouseMove={this.handleMouse.bind(this)}></canvas>
+            <canvas width={this.state.width} height={this.state.height} ref="canvas" 
+                    onMouseMove={this.handleMouseMove.bind(this)}
+                    onMouseUp={this.handleMouseUp.bind(this)}
+                    onMouseDown={this.handleMouseDown.bind(this)}></canvas>
         );
     }
     
