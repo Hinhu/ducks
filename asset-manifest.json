@@ -1,14 +1,15 @@
 {
-  "main.css": "/ducks/static/css/main.e02fa2f7.chunk.css",
-  "main.js": "/ducks/static/js/main.e83293ff.chunk.js",
-  "main.js.map": "/ducks/static/js/main.e83293ff.chunk.js.map",
+  "main.css": "/ducks/static/css/main.0beae3ff.chunk.css",
+  "main.js": "/ducks/static/js/main.ba137d35.chunk.js",
+  "main.js.map": "/ducks/static/js/main.ba137d35.chunk.js.map",
   "runtime~main.js": "/ducks/static/js/runtime~main.11ce8b69.js",
   "runtime~main.js.map": "/ducks/static/js/runtime~main.11ce8b69.js.map",
-  "static/js/2.dfdf0e23.chunk.js": "/ducks/static/js/2.dfdf0e23.chunk.js",
-  "static/js/2.dfdf0e23.chunk.js.map": "/ducks/static/js/2.dfdf0e23.chunk.js.map",
+  "static/js/2.fb4c6f1c.chunk.js": "/ducks/static/js/2.fb4c6f1c.chunk.js",
+  "static/js/2.fb4c6f1c.chunk.js.map": "/ducks/static/js/2.fb4c6f1c.chunk.js.map",
   "index.html": "/ducks/index.html",
-  "precache-manifest.f31907a9289239480088840288077303.js": "/ducks/precache-manifest.f31907a9289239480088840288077303.js",
+  "precache-manifest.7c3672ded8b6af95fac0ab536793742b.js": "/ducks/precache-manifest.7c3672ded8b6af95fac0ab536793742b.js",
   "service-worker.js": "/ducks/service-worker.js",
-  "static/css/main.e02fa2f7.chunk.css.map": "/ducks/static/css/main.e02fa2f7.chunk.css.map",
+  "static/css/main.0beae3ff.chunk.css.map": "/ducks/static/css/main.0beae3ff.chunk.css.map",
+  "static/media/background-beach.png": "/ducks/static/media/background-beach.bc66ab6c.png",
   "static/media/background-grass.png": "/ducks/static/media/background-grass.2082c1a4.png"
 }
