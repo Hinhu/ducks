@@ -10,7 +10,10 @@ class GameCanvas extends Component{
             width: 700,
             height: 420,
             level: 1,
+            score: 0,
+            bonusPoints: 0,
             ducks: [],
+            bonusDucks: [],
             bow: {
                 x: 105,
                 y: 300,
@@ -37,22 +40,29 @@ class GameCanvas extends Component{
 
     initDucks(state){
         let ducksArray = [];
+        let bonusDucksArray = [];
         for(let i=0; i<this.DUCKS_BASE_NUM+2*state.level; i++)
             ducksArray.push({
                 x: state.width+(Math.random()*70+i*200+40*state.level),
                 y: (Math.random()*100+20),
                 speed: (Math.random()*0.05*state.level+0.2*state.level+1.2)
             });
+        for(let i=0; i<Math.random()*Math.random()*3; i++)
+            bonusDucksArray.push({
+                x: state.width+(Math.random()*500+i*600+40*state.level+1500),
+                y: Math.random()*100+20,
+                speed: (Math.random()*0.05*state.level+0.2*state.level+2)
+            })
         this.setState({
-            ducks: ducksArray
+            ducks: ducksArray,
+            bonusDucks: bonusDucksArray
         });
     }
 
     initImages(state, context){
-        
-        
         this.backgroundImg = new Image();
         this.duckImg = new Image();
+        this.bonusDuckImg = new Image();
         this.bowImg = new Image();
         this.arrowImg = new Image();
         switch(localStorage.getItem("map")) {
@@ -61,6 +71,7 @@ class GameCanvas extends Component{
             default: this.backgroundImg.src = require("../img/background-grass.png"); break;
         }
         this.duckImg.src = require("../img/duck.png");
+        this.bonusDuckImg.src = require("../img/bonus-duck.png");
         this.bowImg.src = require("../img/bow.png");
         this.arrowImg.src = require("../img/arrow.png");
         this.backgroundImg.onload = function() {
@@ -92,6 +103,9 @@ class GameCanvas extends Component{
         state.ducks.forEach(element => {
             context.drawImage(this.duckImg, element.x, element.y);
         });
+        state.bonusDucks.forEach(element => {
+            context.drawImage(this.bonusDuckImg, element.x, element.y);
+        })
         state.arrows.forEach(element => {
             this.drawArrow(context, element);
         })
@@ -132,7 +146,7 @@ class GameCanvas extends Component{
         bow.power = 0;
         this.setState({bow});
         this.setState({arrows});
-        console.log(this.state)
+        //console.log(this.state)
     }
 
     startStretching(event){
@@ -167,7 +181,29 @@ class GameCanvas extends Component{
     }
 
     calculateAngle(mouseY){
-        return Math.PI/24*41+mouseY/250;
+        return Math.PI/24*39+mouseY/250;
+    }
+
+    checkCollisions(arrow){
+        let ducks = this.state.ducks;
+        let bonusDucks = this.state.bonusDucks;
+
+        const aliveDucks = ducks.filter(duck => 
+            !(arrow.y <= duck.y+this.duckImg.height && arrow.y >= duck.y 
+                && arrow.x+this.arrowImg.width/2 >= duck.x && arrow.x+this.arrowImg.width/2 <= duck.x+this.duckImg.width))
+        const aliveBonusDucks = bonusDucks.filter(duck => 
+            !(arrow.y <= duck.y+this.bonusDuckImg.height && arrow.y >= duck.y 
+                && arrow.x+this.arrowImg.width/2 >= duck.x && arrow.x+this.arrowImg.width/2 <= duck.x+this.bonusDuckImg.width))
+
+        let deadDucks = ducks.length - aliveDucks.length;
+        let deadBonusDucks = bonusDucks.length - aliveBonusDucks.length;
+        
+        this.setState((state) => ({
+            ducks: aliveDucks,
+            bonusDucks: aliveBonusDucks,
+            score: state.score += deadDucks,
+            bonusPoints: state.bonusPoints += deadBonusDucks
+        }))
     }
 
     loop(){
@@ -177,6 +213,11 @@ class GameCanvas extends Component{
                 y: duck.y,
                 speed: duck.speed
             }))
+            const bonusDucksArray = state.bonusDucks.map(bonusDuck => ({
+                x: bonusDuck.x - bonusDuck.speed,
+                y: bonusDuck.y,
+                speed: bonusDuck.speed
+            }))
             const arrowsArray = state.arrows.map(arrow => ({
                 x: arrow.x + arrow.vx,
                 y: arrow.y - arrow.vy,
@@ -184,12 +225,15 @@ class GameCanvas extends Component{
                 vx: arrow.vx,
                 rotation: Math.sign(arrow.vx)*Math.PI/2-Math.atan(arrow.vy/arrow.vx) 
             }))
+            const arrowsInMap = arrowsArray.filter(arrow => arrow.y < this.state.height)
             return {
                 ducks: ducksArray, 
-                arrows: arrowsArray   
+                bonusDucks: bonusDucksArray,
+                arrows: arrowsInMap   
             };
         });
-        
+        this.state.arrows.forEach(arrow => this.checkCollisions(arrow));
+
         if(this.state.bow.isStretching){
             let bow = {...this.state.bow};
             if(bow.power > 100)
@@ -200,12 +244,14 @@ class GameCanvas extends Component{
             this.setState({bow});
         }
 
-        if(this.state.ducks.filter(duck => duck.x > -100).length === 0){
+        if(this.state.ducks.concat(this.state.bonusDucks).filter(duck => duck.x > -100).length === 0){
             this.setState((state) => ({
                 level: state.level+1
             }))
-            this.initDucks(this.state)
-            console.log('leveled up', this.state.level)
+            this.initDucks(this.state);
+            console.log('leveled up', this.state.level);
+            console.log('score', this.state.score);
+            console.log('bonus points', this.state.bonusPoints);
         }
 
         
