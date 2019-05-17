@@ -12,7 +12,7 @@ class GameCanvas extends Component{
             level: 1,
             ducks: [],
             bow: {
-                x: 100,
+                x: 105,
                 y: 300,
                 rotation: 0,
                 power: 0,
@@ -182,7 +182,7 @@ class GameCanvas extends Component{
                 y: arrow.y - arrow.vy,
                 vy: arrow.vy - this.GRAVITY,
                 vx: arrow.vx,
-                rotation: Math.PI/2-(Math.atan(arrow.vy/Math.abs(arrow.vx)))
+                rotation: Math.sign(arrow.vx)*Math.PI/2-Math.atan(arrow.vy/arrow.vx) 
             }))
             return {
                 ducks: ducksArray, 
