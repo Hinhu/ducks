@@ -185,9 +185,11 @@ class GameCanvas extends Component{
     }
 
     checkCollisions(arrow){
+        // arrow is out of map
+        if(arrow.x>this.state.width || arrow.x < 0)
+            return;
         let ducks = this.state.ducks;
         let bonusDucks = this.state.bonusDucks;
-
         const aliveDucks = ducks.filter(duck => 
             !(arrow.y <= duck.y+this.duckImg.height && arrow.y >= duck.y 
                 && arrow.x+this.arrowImg.width/2 >= duck.x && arrow.x+this.arrowImg.width/2 <= duck.x+this.duckImg.width))
@@ -197,7 +199,10 @@ class GameCanvas extends Component{
 
         let deadDucks = ducks.length - aliveDucks.length;
         let deadBonusDucks = bonusDucks.length - aliveBonusDucks.length;
-        
+
+        if(deadDucks+deadBonusDucks>0)
+            this.props.onPointsChange(this.state.score+deadDucks, this.state.bonusPoints+deadBonusDucks);
+
         this.setState((state) => ({
             ducks: aliveDucks,
             bonusDucks: aliveBonusDucks,
@@ -249,6 +254,7 @@ class GameCanvas extends Component{
                 level: state.level+1
             }))
             this.initDucks(this.state);
+            this.props.onLevelUp(this.state.level);
             console.log('leveled up', this.state.level);
             console.log('score', this.state.score);
             console.log('bonus points', this.state.bonusPoints);
