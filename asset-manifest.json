@@ -1,0 +1,15 @@
+{
+  "main.css": "/ducks/static/css/main.bf7d1600.chunk.css",
+  "main.js": "/ducks/static/js/main.7e3ab5af.chunk.js",
+  "main.js.map": "/ducks/static/js/main.7e3ab5af.chunk.js.map",
+  "runtime~main.js": "/ducks/static/js/runtime~main.11ce8b69.js",
+  "runtime~main.js.map": "/ducks/static/js/runtime~main.11ce8b69.js.map",
+  "static/js/2.b75c50b9.chunk.js": "/ducks/static/js/2.b75c50b9.chunk.js",
+  "static/js/2.b75c50b9.chunk.js.map": "/ducks/static/js/2.b75c50b9.chunk.js.map",
+  "index.html": "/ducks/index.html",
+  "precache-manifest.4170b26b091843dc9614a47f32858707.js": "/ducks/precache-manifest.4170b26b091843dc9614a47f32858707.js",
+  "service-worker.js": "/ducks/service-worker.js",
+  "static/css/main.bf7d1600.chunk.css.map": "/ducks/static/css/main.bf7d1600.chunk.css.map",
+  "static/media/background-beach.png": "/ducks/static/media/background-beach.bc66ab6c.png",
+  "static/media/background-grass.png": "/ducks/static/media/background-grass.2082c1a4.png"
+}
