@@ -50,6 +50,7 @@ class GameCanvas extends Component{
     }
 
     finishGame(){
+        /* darken the canvas and let the player know that he lost */
         let context = this.refs.canvas.getContext('2d');
         context.fillStyle = "rgba(0, 0, 0, 0.4)";
         context.fillRect(0, 0, this.state.width, this.state.height);
@@ -59,6 +60,7 @@ class GameCanvas extends Component{
     }
 
     loading(){
+        /* show loading screen while waiting setState to finish */
         let context = this.refs.canvas.getContext('2d');
         context.fillStyle = "rgba(0, 0, 0, 0.4)";
         context.fillRect(0, 0, this.state.width, this.state.height);
@@ -68,6 +70,7 @@ class GameCanvas extends Component{
     }
 
     retryGame(){
+        /* reset scores and so on */
         this.setState({
             level: 1,
             score: 0,
@@ -75,19 +78,25 @@ class GameCanvas extends Component{
             missedDucks: 0,
             isFinished: false
         })
+        /* show loading screen */
         requestAnimationFrame(() => this.loading());
+        /* let the setState finish, so the game won't start with higher level */
         setTimeout(() => this.startGame(), 1000); 
     }
 
     initDucks(){
         let ducksArray = [];
         let bonusDucksArray = [];
+
+        /* create regular ducks */
         for(let i=0; i<this.DUCKS_BASE_NUM+2*this.state.level; i++)
             ducksArray.push({
                 x: this.state.width+(Math.random()*70+i*200+40*this.state.level),
                 y: (Math.random()*100+20),
                 speed: (Math.random()*0.05*this.state.level+0.2*this.state.level+1.2)
             });
+        
+        /* create bonus ducks */
         for(let i=0; i<Math.random()*Math.random()*3; i++)
             bonusDucksArray.push({
                 x: this.state.width+(Math.random()*500+i*600+40*this.state.level+1500),
@@ -102,16 +111,20 @@ class GameCanvas extends Component{
 
     initImages(context){
         let state = this.state;
+        /* init images */
         this.backgroundImg = new Image();
         this.duckImg = new Image();
         this.bonusDuckImg = new Image();
         this.bowImg = new Image();
         this.arrowImg = new Image();
+
+        /* get background from settings */
         switch(localStorage.getItem("map")) {
             case "lake": this.backgroundImg.src = require("../img/background-beach.png"); break;
             case "city": this.backgroundImg.src = require("../img/background-dark.png"); break;
             default: this.backgroundImg.src = require("../img/background-grass.png"); break;
         }
+        /* load images */
         this.duckImg.src = require("../img/duck.png");
         this.bonusDuckImg.src = require("../img/bonus-duck.png");
         this.bowImg.src = require("../img/bow.png");
@@ -142,17 +155,29 @@ class GameCanvas extends Component{
         if(this.state.isFinished)
             return;
         let context = this.refs.canvas.getContext('2d');
+
+        /* draw background */
         context.drawImage(this.backgroundImg, 0, 0);
+
+        /* draw bow */
         this.drawBow(context);
+
+        /* draw regular ducks */
         this.state.ducks.forEach(element => {
             context.drawImage(this.duckImg, element.x, element.y);
         });
+
+        /* draw bonus ducks */
         this.state.bonusDucks.forEach(element => {
             context.drawImage(this.bonusDuckImg, element.x, element.y);
         })
+
+        /* draw arrows */
         this.state.arrows.forEach(element => {
             this.drawArrow(context, element);
         })
+
+        /* draw power bar */
         if(this.state.bow.isStretching)
             this.drawPowerBar(context);
     }
@@ -169,6 +194,7 @@ class GameCanvas extends Component{
         this.startStretching(event);
     }
 
+    /* get bow rotation from mouse Y-position */
     rotateBow(event){
         let bow = {...this.state.bow};
         bow.rotation = this.calculateAngle(event.screenY);
@@ -235,16 +261,22 @@ class GameCanvas extends Component{
 
         let ducks = this.state.ducks;
         let bonusDucks = this.state.bonusDucks;
+
+        /* get all regular ducks alive */
         const aliveDucks = ducks.filter(duck => 
             !(arrow.y <= duck.y+this.duckImg.height && arrow.y >= duck.y 
                 && arrow.x+this.arrowImg.width/2 >= duck.x && arrow.x+this.arrowImg.width/2 <= duck.x+this.duckImg.width))
+        
+        /* get all bonus ducks alive */
         const aliveBonusDucks = bonusDucks.filter(duck => 
             !(arrow.y <= duck.y+this.bonusDuckImg.height && arrow.y >= duck.y 
                 && arrow.x+this.arrowImg.width/2 >= duck.x && arrow.x+this.arrowImg.width/2 <= duck.x+this.bonusDuckImg.width))
 
+        /* calculate number of dead ducks */
         let deadDucks = ducks.length - aliveDucks.length;
         let deadBonusDucks = bonusDucks.length - aliveBonusDucks.length;
 
+        /* update stats if something is shot */
         if(deadDucks+deadBonusDucks>0)
             this.props.onPointsChange(this.state.score+deadDucks, this.state.bonusPoints+deadBonusDucks);
 
@@ -258,16 +290,21 @@ class GameCanvas extends Component{
 
     loop(){
         this.setState((state) => {
+            /* update ducks regular position */
             const ducksArray = state.ducks.map(duck => ({
                 x: duck.x - duck.speed,
                 y: duck.y,
                 speed: duck.speed
             }))
+
+            /* update bonus ducks position */
             const bonusDucksArray = state.bonusDucks.map(bonusDuck => ({
                 x: bonusDuck.x - bonusDuck.speed,
                 y: bonusDuck.y,
                 speed: bonusDuck.speed
             }))
+
+            /* update arrows position and rotation*/
             const arrowsArray = state.arrows.map(arrow => ({
                 x: arrow.x + arrow.vx,
                 y: arrow.y - arrow.vy,
@@ -275,6 +312,8 @@ class GameCanvas extends Component{
                 vx: arrow.vx,
                 rotation: Math.sign(arrow.vx)*Math.PI/2-Math.atan(arrow.vy/arrow.vx) 
             }))
+
+            /* get rid of arrows that fell below the map */
             const arrowsInMap = arrowsArray.filter(arrow => arrow.y < this.state.height)
             return {
                 ducks: ducksArray, 
@@ -282,8 +321,11 @@ class GameCanvas extends Component{
                 arrows: arrowsInMap   
             };
         });
+
+        /* check collisions and update score */
         this.state.arrows.forEach(arrow => this.checkCollisions(arrow));
 
+        /* update power bar */
         if(this.state.bow.isStretching){
             let bow = {...this.state.bow};
             if(bow.power > 100)
@@ -294,25 +336,38 @@ class GameCanvas extends Component{
             this.setState({bow});
         }
 
+        /* update missing ducks */
         const missedDucks = this.state.ducks.filter(duck => duck.x < -30).length
+
+        /* check if player lost */
         if(missedDucks === this.props.maxDucksMissed)
             this.setState({isFinished: true})
+
+        /* update number of missed ducks */
         if(missedDucks !== this.state.missedDucks){
             this.setState({missedDucks: missedDucks});
             this.props.onDuckMissed(missedDucks);
         }
 
+        /* check if all ducks are dead or have flown away, so the level can be increased */
         if(this.state.ducks.concat(this.state.bonusDucks).filter(duck => duck.x > -100).length === 0){
             this.setState((state) => ({
                 level: state.level+1
             }))
+
+            /* create new ducks */
             this.initDucks(this.state);
+
+            /* update level stat */
             this.props.onLevelUp(this.state.level);
+
+            /* debug */
             console.log('leveled up', this.state.level);
             console.log('score', this.state.score);
             console.log('bonus points', this.state.bonusPoints);
         }
 
+        /* animate only if player hasn't lost */
         if(!this.state.isFinished)
             requestAnimationFrame(this.loop.bind(this));
         else 
