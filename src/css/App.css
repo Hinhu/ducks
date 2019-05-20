@@ -1,6 +1,7 @@
-#title {
-  margin-top: 10vh;
-  margin-bottom: 10vh;
+#game-canvas{
+  margin-top: 4vh;
+  margin-bottom: 4vh;
+
   font-family: 'Press Start 2P', cursive;
   font-style: normal;
   font-weight: normal;
@@ -11,7 +12,30 @@
   text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black;
 }
 
-.center {
+#game-stats{
+  font-family: 'Press Start 2P', cursive;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 36px;
+  line-height: normal;
+  text-align: center;
+
+  color: white;
+
+  text-shadow: -3px 0 black, 0 3px black, 3px 0 black, 0 -3px black;
+}
+
+#retry-button{
+  margin-top: 1vh;
+  font-family: 'Press Start 2P', cursive;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 52px;
+  line-height: normal;
+  text-align: center;
+}
+
+.center{
   text-align: center;
 }
 
