@@ -13,6 +13,9 @@ class GameStats extends Component {
                 <div>
                     Bonus points: {this.props.bonusPoints}
                 </div>
+                <div>
+                    Missed ducks left: {this.props.missedShotsLeft}
+                </div>
                 
 			</div>
 		);

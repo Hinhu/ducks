@@ -6,10 +6,12 @@ class Game extends Component {
 
 	constructor(props){
 		super(props);
+		this.MAX_DUCKS_MISSED = 5;
 		this.state = {
 			level: 1,
 			score: 0,
-			bonusPoints: 0
+			bonusPoints: 0,
+			missedDucksLeft: 5
 		}
 	}
 
@@ -21,14 +23,27 @@ class Game extends Component {
 		this.setState({score: newScore, bonusPoints: newBonusPoints});
 	}
 
+	handleOnDuckMissed = (missedDucks) => {
+		this.setState({
+			missedDucksLeft: this.MAX_DUCKS_MISSED - missedDucks
+		})
+	}
+
 	render() {
 		return (
 			<div>
-				<div id="title">
+				<div id="game-canvas">
                     <GameCanvas onLevelUp={this.handleOnLevelUp}
-								onPointsChange={this.handleOnPointsChange}/>
+								onPointsChange={this.handleOnPointsChange}
+								onDuckMissed={this.handleOnDuckMissed}
+								maxDucksMissed={this.MAX_DUCKS_MISSED}/>
 				</div>
-				<GameStats level={this.state.level} score={this.state.score} bonusPoints={this.state.bonusPoints}/>
+				<div id="game-stats">
+				<GameStats level={this.state.level} 
+							score={this.state.score} 
+							bonusPoints={this.state.bonusPoints}
+							missedShotsLeft={this.state.missedDucksLeft}/>
+				</div>
 			</div>
 		);
 	}

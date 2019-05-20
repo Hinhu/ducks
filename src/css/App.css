@@ -1,11 +1,24 @@
-#title{
-  margin-top: 10vh;
-  margin-bottom: 10vh;
+#game-canvas{
+  margin-top: 4vh;
+  margin-bottom: 4vh;
 
   font-family: 'Press Start 2P', cursive;
   font-style: normal;
   font-weight: normal;
   font-size: 96px;
+  line-height: normal;
+  text-align: center;
+
+  color: white;
+
+  text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black;
+}
+
+#game-stats{
+  font-family: 'Press Start 2P', cursive;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 40px;
   line-height: normal;
   text-align: center;
 

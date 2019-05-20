@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 
 class GameCanvas extends Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.GRAVITY = 0.420420;
         this.DUCKS_BASE_NUM = 4;
         this.state = {
             backgroundColor: "green",
             width: 700,
             height: 420,
+            isFinished: false,
             level: 1,
             score: 0,
             bonusPoints: 0,
+            missedDucks: 0,
             ducks: [],
             bonusDucks: [],
             bow: {
@@ -97,6 +99,8 @@ class GameCanvas extends Component{
     }
 
     updateCanvas(state){
+        if(this.state.isFinished)
+            return;
         let context = this.refs.canvas.getContext('2d');
         context.drawImage(this.backgroundImg, 0, 0);
         this.drawBow(context);
@@ -180,6 +184,16 @@ class GameCanvas extends Component{
         context.fillRect(200, 300, 20, 100-this.state.bow.power);
     }
 
+    finishGame(){
+        let context = this.refs.canvas.getContext('2d');
+        context.fillStyle = "rgba(0, 0, 0, 0.4)";
+        context.fillRect(0, 0, this.state.width, this.state.height);
+        context.fillStyle = "white";
+        context.font = "72px Comic Sans MS"
+        context.fillText("YOU LOST!", this.state.width/2-190, this.state.height/2);
+        
+    }
+
     calculateAngle(mouseY){
         return Math.PI/24*39+mouseY/250;
     }
@@ -188,6 +202,7 @@ class GameCanvas extends Component{
         // arrow is out of map
         if(arrow.x>this.state.width || arrow.x < 0)
             return;
+
         let ducks = this.state.ducks;
         let bonusDucks = this.state.bonusDucks;
         const aliveDucks = ducks.filter(duck => 
@@ -249,6 +264,14 @@ class GameCanvas extends Component{
             this.setState({bow});
         }
 
+        const missedDucks = this.state.ducks.filter(duck => duck.x < -30).length
+        if(missedDucks === this.props.maxDucksMissed)
+            this.setState({isFinished: true})
+        if(missedDucks !== this.state.missedDucks){
+            this.setState({missedDucks: missedDucks});
+            this.props.onDuckMissed(missedDucks);
+        }
+
         if(this.state.ducks.concat(this.state.bonusDucks).filter(duck => duck.x > -100).length === 0){
             this.setState((state) => ({
                 level: state.level+1
@@ -260,8 +283,10 @@ class GameCanvas extends Component{
             console.log('bonus points', this.state.bonusPoints);
         }
 
-        
-        requestAnimationFrame(this.loop.bind(this));
+        if(!this.state.isFinished)
+            requestAnimationFrame(this.loop.bind(this));
+        else 
+            this.finishGame();
     }
 
 
