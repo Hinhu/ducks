@@ -1,0 +1,57 @@
+#cash {
+  font-size: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.upgrade-title{
+  font-size: 34px;
+  text-shadow: -3px 0 black, 0 3px black, 3px 0 black, 0 -3px black;
+}
+
+.upgrade-description{
+  font-size: 18px;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+  margin-left: 50px;
+}
+
+.upgrade-bought{
+  font-size: 60px;
+  margin-left: 100px;
+}
+
+.upgrade{
+  margin: 15px;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+.box{
+  display:inline-block;
+  width: 100px;
+  height: 100px;
+  position: relative;
+  border: 10px solid white;
+}
+
+.box:before {
+  content: " ";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  border: 5px solid black;
+}
+.box:after {
+  content: " ";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  border: 5px solid black;
+}

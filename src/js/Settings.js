@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../css/Settings.css'
+import Greeter from './Greeter.js'
 import Back from './Back.js'
 import ChangeNameDialog from './ChangeNameDialog.js'
 import ResetRankingDialog from './ResetRankingDialog.js'
@@ -75,6 +76,7 @@ class Settings extends Component {
 	render() {
 		return (
 			<div>
+				<Greeter />
 				<div id="title">
 					SETTINGS
 				</div>
