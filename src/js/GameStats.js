@@ -13,8 +13,8 @@ class GameStats extends Component {
                 <div>
                     Bonus points: {this.props.bonusPoints}
                 </div>
-                <div>
-                    Missed ducks left: {this.props.missedShotsLeft}
+                <div>{this.props.missedShotsLeft !== 0 ? <span>
+                    Missed ducks left: {this.props.missedShotsLeft}</span> : ""}
                 </div>
                 
 			</div>

@@ -29,39 +29,79 @@ class GameCanvas extends Component{
     }
 
     componentDidMount(){
-        this.initCanvas(this.state, this.refs.canvas.getContext('2d'));
-        this.initDucks(this.state);
+        this.startGame();
+    }
+
+    componentDidUpdate(){
+        this.updateCanvas();
+    }
+
+    startGame(){
+        this.initCanvas(this.refs.canvas.getContext('2d'));
+        this.initDucks();
+        this.startAnimation();
+    }
+
+    startAnimation(){
+        console.log(this.state)
         requestAnimationFrame(()=>{
             this.loop();
         });
     }
 
-    componentDidUpdate(){
-        this.updateCanvas(this.state);
+    finishGame(){
+        let context = this.refs.canvas.getContext('2d');
+        context.fillStyle = "rgba(0, 0, 0, 0.4)";
+        context.fillRect(0, 0, this.state.width, this.state.height);
+        context.fillStyle = "white";
+        context.font = "72px Comic Sans MS"
+        context.fillText("YOU LOST", this.state.width/2-180, this.state.height/2);
     }
 
-    initDucks(state){
+    loading(){
+        let context = this.refs.canvas.getContext('2d');
+        context.fillStyle = "rgba(0, 0, 0, 0.4)";
+        context.fillRect(0, 0, this.state.width, this.state.height);
+        context.fillStyle = "white";
+        context.font = "60px Comic Sans MS"
+        context.fillText("Loading...", this.state.width/2-120, this.state.height/2);
+    }
+
+    retryGame(){
+        this.setState({
+            level: 1,
+            score: 0,
+            bonusPoints: 0,
+            missedDucks: 0,
+            isFinished: false
+        })
+        requestAnimationFrame(() => this.loading());
+        setTimeout(() => this.startGame(), 1000); 
+    }
+
+    initDucks(){
         let ducksArray = [];
         let bonusDucksArray = [];
-        for(let i=0; i<this.DUCKS_BASE_NUM+2*state.level; i++)
+        for(let i=0; i<this.DUCKS_BASE_NUM+2*this.state.level; i++)
             ducksArray.push({
-                x: state.width+(Math.random()*70+i*200+40*state.level),
+                x: this.state.width+(Math.random()*70+i*200+40*this.state.level),
                 y: (Math.random()*100+20),
-                speed: (Math.random()*0.05*state.level+0.2*state.level+1.2)
+                speed: (Math.random()*0.05*this.state.level+0.2*this.state.level+1.2)
             });
         for(let i=0; i<Math.random()*Math.random()*3; i++)
             bonusDucksArray.push({
-                x: state.width+(Math.random()*500+i*600+40*state.level+1500),
+                x: this.state.width+(Math.random()*500+i*600+40*this.state.level+1500),
                 y: Math.random()*100+20,
-                speed: (Math.random()*0.05*state.level+0.2*state.level+2)
+                speed: (Math.random()*0.05*this.state.level+0.2*this.state.level+2)
             })
         this.setState({
             ducks: ducksArray,
             bonusDucks: bonusDucksArray
-        });
+        })
     }
 
-    initImages(state, context){
+    initImages(context){
+        let state = this.state;
         this.backgroundImg = new Image();
         this.duckImg = new Image();
         this.bonusDuckImg = new Image();
@@ -93,24 +133,24 @@ class GameCanvas extends Component{
 
     }
 
-    initCanvas(state, context){
-        this.initImages(state, context);
+    initCanvas(context){
+        this.initImages(context);
         console.log('init canvas');
     }
 
-    updateCanvas(state){
+    updateCanvas(){
         if(this.state.isFinished)
             return;
         let context = this.refs.canvas.getContext('2d');
         context.drawImage(this.backgroundImg, 0, 0);
         this.drawBow(context);
-        state.ducks.forEach(element => {
+        this.state.ducks.forEach(element => {
             context.drawImage(this.duckImg, element.x, element.y);
         });
-        state.bonusDucks.forEach(element => {
+        this.state.bonusDucks.forEach(element => {
             context.drawImage(this.bonusDuckImg, element.x, element.y);
         })
-        state.arrows.forEach(element => {
+        this.state.arrows.forEach(element => {
             this.drawArrow(context, element);
         })
         if(this.state.bow.isStretching)
@@ -182,16 +222,6 @@ class GameCanvas extends Component{
         context.fillRect(200, 300, 20, 100);
         context.fillStyle = "#000000";
         context.fillRect(200, 300, 20, 100-this.state.bow.power);
-    }
-
-    finishGame(){
-        let context = this.refs.canvas.getContext('2d');
-        context.fillStyle = "rgba(0, 0, 0, 0.4)";
-        context.fillRect(0, 0, this.state.width, this.state.height);
-        context.fillStyle = "white";
-        context.font = "72px Comic Sans MS"
-        context.fillText("YOU LOST!", this.state.width/2-190, this.state.height/2);
-        
     }
 
     calculateAngle(mouseY){

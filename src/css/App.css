@@ -18,13 +18,23 @@
   font-family: 'Press Start 2P', cursive;
   font-style: normal;
   font-weight: normal;
-  font-size: 40px;
+  font-size: 36px;
   line-height: normal;
   text-align: center;
 
   color: white;
 
-  text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black;
+  text-shadow: -3px 0 black, 0 3px black, 3px 0 black, 0 -3px black;
+}
+
+#retry-button{
+  margin-top: 1vh;
+  font-family: 'Press Start 2P', cursive;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 52px;
+  line-height: normal;
+  text-align: center;
 }
 
 .center{

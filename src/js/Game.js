@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import GameCanvas from './GameCanvas'
 import GameStats from './GameStats';
+import RetryButton from './RetryButton';
 
 class Game extends Component {
 
@@ -11,7 +12,7 @@ class Game extends Component {
 			level: 1,
 			score: 0,
 			bonusPoints: 0,
-			missedDucksLeft: 5
+			missedDucksLeft: this.MAX_DUCKS_MISSED
 		}
 	}
 
@@ -29,20 +30,34 @@ class Game extends Component {
 		})
 	}
 
+	handleOnRetry = () => {
+		this.refs.canvas.retryGame();
+		this.setState({
+			level: 1,
+			score: 0,
+			bonusPoints: 0,
+			missedDucksLeft: this.MAX_DUCKS_MISSED
+		})
+	}
+
 	render() {
 		return (
 			<div>
 				<div id="game-canvas">
-                    <GameCanvas onLevelUp={this.handleOnLevelUp}
+					<GameCanvas ref="canvas"
+								onLevelUp={this.handleOnLevelUp}
 								onPointsChange={this.handleOnPointsChange}
 								onDuckMissed={this.handleOnDuckMissed}
 								maxDucksMissed={this.MAX_DUCKS_MISSED}/>
 				</div>
 				<div id="game-stats">
-				<GameStats level={this.state.level} 
-							score={this.state.score} 
-							bonusPoints={this.state.bonusPoints}
-							missedShotsLeft={this.state.missedDucksLeft}/>
+					<GameStats level={this.state.level} 
+								score={this.state.score} 
+								bonusPoints={this.state.bonusPoints}
+								missedShotsLeft={this.state.missedDucksLeft}/>
+				</div>
+				<div>
+					{this.state.missedDucksLeft === 0 ? <RetryButton onRetry={this.handleOnRetry}/> : ""}
 				</div>
 			</div>
 		);
