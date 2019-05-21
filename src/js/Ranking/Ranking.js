@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Rank from './Rank.js'
-import Back from './Back.js'
-import Greeter from './Greeter.js'
+import Rank from './Rank'
+import Back from '../shared/Back'
+import Greeter from '../shared/Greeter'
 
 class Ranking extends Component {
 
@@ -11,7 +11,6 @@ class Ranking extends Component {
 		if (this.ranks.length < 5) {
 			for (let i = this.ranks.length + 1; i <= 5; i++) {
 				this.ranks.push({
-					place: i,
 					name: ".....",
 					score: "..."
 				})
@@ -27,9 +26,11 @@ class Ranking extends Component {
 					RANKING
             	</div>
 				<div className="center">
-					{this.ranks.map((rank, i) => (
-						<Rank number={rank.place} name={rank.name} score={rank.score} key={i} />
-					))}
+					<table className="center">
+						{this.ranks.map((rank, i) => (
+							<Rank number={i+1} name={rank.name} score={rank.score} key={i} />
+						))}
+					</table>
 					<Back />
 				</div>
 			</div>

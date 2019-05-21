@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UpgradeDialog from './UpgradeDialog.js';
+import UpgradeDialog from './UpgradeDialog';
 import Grid from '@material-ui/core/Grid';
 
 class Upgrade extends Component {

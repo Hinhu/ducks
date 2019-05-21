@@ -120,15 +120,15 @@ class GameCanvas extends Component{
 
         /* get background from settings */
         switch(localStorage.getItem("map")) {
-            case "lake": this.backgroundImg.src = require("../img/background-beach.png"); break;
-            case "city": this.backgroundImg.src = require("../img/background-dark.png"); break;
-            default: this.backgroundImg.src = require("../img/background-grass.png"); break;
+            case "lake": this.backgroundImg.src = require("../../img/background-beach.png"); break;
+            case "city": this.backgroundImg.src = require("../../img/background-dark.png"); break;
+            default: this.backgroundImg.src = require("../../img/background-grass.png"); break;
         }
         /* load images */
-        this.duckImg.src = require("../img/duck.png");
-        this.bonusDuckImg.src = require("../img/bonus-duck.png");
-        this.bowImg.src = require("../img/bow.png");
-        this.arrowImg.src = require("../img/arrow.png");
+        this.duckImg.src = require("../../img/duck.png");
+        this.bonusDuckImg.src = require("../../img/bonus-duck.png");
+        this.bowImg.src = require("../../img/bow.png");
+        this.arrowImg.src = require("../../img/arrow.png");
         this.backgroundImg.onload = function() {
             context.clearRect(0,0,state.width, state.height);
             context.drawImage(this, 0, 0, state.width, state.height);

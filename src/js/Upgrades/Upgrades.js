@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Back from './Back.js';
-import Cash from './Cash.js';
-import Greeter from './Greeter.js';
-import Upgrade from './Upgrade.js';
-import '../css/Upgrades.css';
+import Back from '../shared/Back';
+import Cash from './Cash';
+import Greeter from '../shared/Greeter';
+import Upgrade from './Upgrade';
+import '../../css/Upgrades.css';
 
 class Upgrades extends Component {
 

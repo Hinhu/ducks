@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Greeter from './Greeter.js'
-import '../css/App.css'
-import '../css/MainMenu.css'
+import Greeter from '../shared/Greeter';
+import '../../css/App.css';
+import '../../css/MainMenu.css';
 
 class MainMenu extends Component {
     render() {

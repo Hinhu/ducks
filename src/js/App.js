@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
-import MainMenu from './MainMenu.js';
-import Game from './Game.js';
-import Upgrades from './Upgrades.js';
-import Ranking from './Ranking.js';
-import Settings from './Settings.js';
-import NotFound from './NotFound.js';
+import MainMenu from './MainMenu/MainMenu';
+import Game from './Game/Game';
+import Upgrades from './Upgrades/Upgrades';
+import Ranking from './Ranking/Ranking';
+import Settings from './Settings/Settings';
+import NotFound from './shared/NotFound';
 
 
 class App extends Component {

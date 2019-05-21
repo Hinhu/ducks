@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import '../css/Settings.css'
-import Greeter from './Greeter.js'
-import Back from './Back.js'
-import ChangeNameDialog from './ChangeNameDialog.js'
-import ResetRankingDialog from './ResetRankingDialog.js'
-import DeleteSaveDialog from './DeleteSaveDialog.js'
+import '../../css/Settings.css';
+import Greeter from '../shared/Greeter';
+import Back from '../shared/Back';
+import ChangeNameDialog from './ChangeNameDialog';
+import ResetRankingDialog from './ResetRankingDialog';
+import DeleteSaveDialog from './DeleteSaveDialog';
 import Grid from '@material-ui/core/Grid';
 
 class Settings extends Component {

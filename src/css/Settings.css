@@ -11,6 +11,14 @@
 .button-text {
     font-size: 20px;
     text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+    text-decoration: none;
+}
+
+.big-dialog-text{
+    margin-top: 5px;
+    font-size: 60px;
+    text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black;
+    text-align: center;
 }
 
 .dialog-text {
