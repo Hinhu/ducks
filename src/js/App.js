@@ -9,7 +9,7 @@ import NotFound from './shared/NotFound';
 
 
 class App extends Component {
-	componentDidMount(){
+	componentWillMount(){
 		if(!localStorage.getItem('name')){
 			localStorage.setItem('name','PLAYER')
 		}

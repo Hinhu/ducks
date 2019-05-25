@@ -23,7 +23,7 @@ class DeleteSaveDialog extends Component {
                 >
                     <DialogContent>
                         <div className="dialog-text">
-                            You will delete all your saved progress permanetly.
+                            You will delete all your saved progress permanently.
                             Do you want to proceed?
                         </div>
                     </DialogContent>

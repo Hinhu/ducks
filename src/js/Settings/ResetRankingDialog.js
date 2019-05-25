@@ -20,7 +20,7 @@ class ResetRankingDialog extends Component {
                 >
                     <DialogContent>
                         <div className="dialog-text">
-                            You will delete all your ranking scores permanetly.
+                            You will delete all your ranking scores permanently.
                             Do you want to proceed?
                         </div>
                     </DialogContent>

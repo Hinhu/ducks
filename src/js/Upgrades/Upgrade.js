@@ -30,6 +30,7 @@ class Upgrade extends Component {
     }
 
     render() {
+        console.log(require("../../img/bow.png"));
         let description;
         let bought;
         if (this.isBougth()) {
@@ -53,6 +54,7 @@ class Upgrade extends Component {
                 <Grid container direction="row" justify="center" alignItems="center" spacing={16} onClick={this.handleClick}>
                     <Grid item style={bought ? { marginLeft: "-76px" } : {}}>
                         <div className="box">
+                            <img src={require("../../img/bow.png")} alt="BOW" width="90" height="90" style={{marginTop:5}}/>
                         </div>
                     </Grid>
                     <Grid item>
