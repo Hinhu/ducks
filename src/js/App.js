@@ -16,6 +16,8 @@ class App extends Component {
 		if(!localStorage.getItem('cash')){
 			localStorage.setItem('cash',0)
 		}
+		//if(!localStorage.getItem('gameState'))
+		localStorage.setItem('gameState', null)
 	}
 
 	render() {
@@ -24,7 +26,7 @@ class App extends Component {
 				<HashRouter>
 					<Switch>
 						<Route path="/" component={MainMenu} exact />
-						<Route path="/game" component={Game} />
+						<Route path="/game" component={Game}/>
 						<Route path="/upgrades" component={Upgrades} />
 						<Route path="/rank" component={Ranking} />
 						<Route path="/settings" component={Settings} />

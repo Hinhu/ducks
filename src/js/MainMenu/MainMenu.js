@@ -5,6 +5,10 @@ import '../../css/App.css';
 import '../../css/MainMenu.css';
 
 class MainMenu extends Component {
+    resetGameState = () => {
+        localStorage.setItem('gameState', null);
+    }
+
     render() {
         return (
             <div>
@@ -16,7 +20,7 @@ class MainMenu extends Component {
                 </div>
                 <div className="center">
                     <div className="margin">
-                    <Link to="/game" className="link">
+                    <Link to="/game" className="link" onClick={this.resetGameState}>
                         NEW GAME
                     </Link>
                     </div>

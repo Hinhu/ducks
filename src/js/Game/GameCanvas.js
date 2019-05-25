@@ -29,12 +29,20 @@ class GameCanvas extends Component{
     }
 
     componentDidMount(){
-        this.startGame();
+        let initialState = JSON.parse(localStorage.getItem('gameState'));
+        if(!initialState)
+            this.startGame();
+        else {
+            this.setState(initialState);
+            this.initImages(this.refs.canvas.getContext('2d'));
+            this.startAnimation();
+        }
     }
 
     componentDidUpdate(){
         this.updateCanvas();
     }
+
 
     startGame(){
         this.initCanvas(this.refs.canvas.getContext('2d'));
@@ -43,7 +51,7 @@ class GameCanvas extends Component{
     }
 
     startAnimation(){
-        console.log(this.state)
+        //console.log(this.state)
         requestAnimationFrame(()=>{
             this.loop();
         });
@@ -368,8 +376,9 @@ class GameCanvas extends Component{
         }
 
         /* animate only if player hasn't lost */
-        if(!this.state.isFinished)
-            requestAnimationFrame(this.loop.bind(this));
+        if(!this.state.isFinished){
+            requestAnimationFrame(() => this.loop());
+        }
         else 
             this.finishGame();
     }

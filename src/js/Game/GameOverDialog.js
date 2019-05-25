@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 class GameOverDialog extends Component {
 
     componentWillMount() {
+        localStorage.setItem('gameState', null);
         localStorage.setItem('cash', parseInt(localStorage.getItem('cash')) + this.props.cash);
         let ranking = JSON.parse(localStorage.getItem("ranking")) || { ranking: [] };
         ranking = ranking.ranking;
@@ -65,7 +66,7 @@ class GameOverDialog extends Component {
                         <div onClick={this.props.onRetry} className="button-text option">
                             RETRY
                         </div>
-                        <Link to="/" className="button-text option danger" >
+                        <Link to="/" className="button-text option danger">
                             BACK
                         </Link>
                     </DialogActions>

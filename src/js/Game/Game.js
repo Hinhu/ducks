@@ -14,6 +14,19 @@ class Game extends Component {
 			score: 0,
 			bonusPoints: 0,
 			missedDucksLeft: this.MAX_DUCKS_MISSED
+		};
+		
+	}
+
+	componentDidMount(){
+		if(localStorage.getItem('gameState') !== 'null'){
+			let gameState = JSON.parse(localStorage.getItem('gameState'))
+			this.setState({
+				level: gameState.level,
+				score: gameState.score,
+				bonusPoints: gameState.bonusPoints,
+				missedDucksLeft: this.MAX_DUCKS_MISSED - gameState.missedDucks
+			});
 		}
 	}
 
@@ -41,6 +54,11 @@ class Game extends Component {
 		})
 	}
 
+	handleOnSaveGameState = () => {
+		let canvasState = this.refs.canvas.state;
+		localStorage.setItem("gameState", JSON.stringify(canvasState));
+	}
+
 	render() {
 		return (
 			<div>
@@ -49,7 +67,7 @@ class Game extends Component {
 						onLevelUp={this.handleOnLevelUp}
 						onPointsChange={this.handleOnPointsChange}
 						onDuckMissed={this.handleOnDuckMissed}
-						maxDucksMissed={this.MAX_DUCKS_MISSED} />
+						maxDucksMissed={this.MAX_DUCKS_MISSED}/>
 				</div>
 				<div id="game-stats">
 					<GameStats level={this.state.level}
@@ -66,7 +84,7 @@ class Game extends Component {
 					/>}
 				</div>
 				<div>
-				<Link to="/" className="button-text text-gray" >
+				<Link to="/" className="button-text text-gray" onClick={this.handleOnSaveGameState}>
                             BACK TO MENU
                         </Link>
 				</div>
