@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import GameCanvas from './GameCanvas'
 import GameStats from './GameStats';
 import GameOverDialog from './GameOverDialog'
+import { Link } from 'react-router-dom';
 
 class Game extends Component {
 
@@ -63,6 +64,11 @@ class Game extends Component {
 						cash={this.state.bonusPoints}
 						onRetry={this.handleOnRetry}
 					/>}
+				</div>
+				<div>
+				<Link to="/" className="button-text text-gray" >
+                            BACK TO MENU
+                        </Link>
 				</div>
 			</div>
 		);
