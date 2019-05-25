@@ -52,9 +52,12 @@ class GameOverDialog extends Component {
                         </div>
                         <div className="dialog-text" style={{ textAlign: "center" }}>
                             {this.place ? 
-                                <span>You've got the {this.place} place!</span> 
+                                <span>You've got the {this.place}
+                                {this.place === 1 ? "st" :
+                                this.place === 2 ? "nd" : 
+                                this.place === 3 ? "rd" : "th"} place!</span> 
                             :
-                                <span>You haven't made into hall of fame...</span>
+                                <span>Hall of Fame is still too far...</span>
                             }
                         </div>
                     </DialogContent>
