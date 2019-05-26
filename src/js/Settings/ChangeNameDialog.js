@@ -17,8 +17,9 @@ class ChangeNameDialog extends Component {
     }
 
     handleInput = (e) => {
-        console.log(e.target.value)
-        this.setState({newName:e.target.value})
+        if (e.target.value.length <= 15) {
+            this.setState({ newName: e.target.value })
+        }
     }
 
     render() {
@@ -31,7 +32,7 @@ class ChangeNameDialog extends Component {
                     <DialogContent>
                         <div className="dialog-text">
                             You can change your name here:
-                            <input className="input" type="text" value={this.state.newName} onInput={this.handleInput}/>
+                            <input className="input" type="text" value={this.state.newName} onInput={this.handleInput} />
                         </div>
                     </DialogContent>
                     <DialogActions>
