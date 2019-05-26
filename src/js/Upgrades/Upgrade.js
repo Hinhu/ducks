@@ -46,7 +46,7 @@ class Upgrade extends Component {
                         <span className="upgrade-title">{this.props.type} Bow</span>
                     </Grid>
                     <Grid item style={{ marginTop: "-20px" }}>
-                        <span className="upgrade-description">{this.props.speedUp}% reload speed up</span>
+                        <span className="upgrade-description">{this.props.speedUp}% stretching speed up</span>
                     </Grid>
                 </Grid>
             );
