@@ -16,9 +16,10 @@ class App extends Component {
 		if(!localStorage.getItem('cash')){
 			localStorage.setItem('cash',0)
 		}
-		localStorage.setItem('Normal', true)
+		localStorage.setItem('Normal', true);
+		localStorage.setItem('bowType', "Normal");
 		//if(!localStorage.getItem('gameState'))
-		localStorage.setItem('gameState', null)
+		localStorage.setItem('gameState', null);
 	}
 
 	render() {

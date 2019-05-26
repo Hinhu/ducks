@@ -31,7 +31,10 @@ class Game extends Component {
 	}
 
 	handleOnLevelUp = (newLevel) => {
-		this.setState({ level: newLevel });
+		this.setState((state) => ({ 
+			level: newLevel,
+			bonusPoints: state.bonusPoints+1
+		 }));
 	}
 
 	handleOnPointsChange = (newScore, newBonusPoints) => {
