@@ -37,15 +37,16 @@
 }
 
 #title {
-  margin-top: 10vh;
-  margin-bottom: 10vh;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
   font-family: 'Press Start 2P', cursive;
   font-style: normal;
   font-weight: normal;
-  font-size: 96px;
+  font-size: 80px;
   line-height: normal;
   text-align: center;
-  color: white;
+  /*color: white;*/
+  color: #dfff2af2;
   text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black;
 }
 
@@ -68,5 +69,5 @@ table.center {
 }
 
 #back-link {
-  margin-top: 10vh;
+  margin-top: 6vh;
 }

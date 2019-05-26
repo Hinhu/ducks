@@ -11,7 +11,7 @@ class UpgradeDialog extends Component {
         cash-=this.props.price;
         localStorage.setItem('cash',cash);
         localStorage.setItem(this.props.type,"true");
-        this.props.handleBuy();
+        this.props.handleBuy(this.props.type);
     }
 
     render() {

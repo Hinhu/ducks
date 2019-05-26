@@ -20,10 +20,10 @@ class Upgrade extends Component {
         let cash = parseInt(localStorage.getItem("cash"));
         if (!this.isBought() && cash > this.props.price) {
             this.setState({ open: true });
-        } else {
-            if (!this.isBought()) {
+        } else if (!this.isBought()) 
                 alert("You don't have enough cash");
-            }
+        else{
+            this.props.handleBuy(this.props.type);
         }
     }
 
@@ -33,12 +33,13 @@ class Upgrade extends Component {
 
     render() {
         //console.log(require("../../img/bow.png"));
+        let selected = localStorage.getItem('bowType') === this.props.type;
         let description;
         let bought;
-        if (this.isBought()) {
-            description = (<div className="upgrade-bought">BOUGHT</div>);
-            bought = true;
-        } else {
+        //if (this.isBought()) {
+            //description = (/*<div className="upgrade-bought">BOUGHT</div>*/<div></div>);
+        //    bought = true;
+        //} else {
             description = (
                 <Grid container direction="column" justify="flex-start" spacing={0}>
                     <Grid item style={{ marginTop: "-20px" }}>
@@ -49,27 +50,28 @@ class Upgrade extends Component {
                     </Grid>
                 </Grid>
             );
-            bought = false;
-        }
+            //bought = false;
+        //}
         return (
             <div className="upgrade">
                 <Grid container direction="row" justify="center" alignItems="center" spacing={16} onClick={this.handleClick}>
-                    <Grid item style={bought ? { marginLeft: "-76px" } : {}}>
+                    <Grid item style={selected ? { marginLeft: "48px" } : {}}>
                         <div className="box">
                             <img src={this.props.type==='Turbo' ? require("../../img/turbo-bow.png") :
                                     this.props.type==='Super' ? require("../../img/super-bow.png") :
                                     this.props.type==='Ultra' ? require("../../img/ultra-bow.png") : 
-                                    require("../../img/bow.png")} alt="BOW" width="90" height="90" style={{marginTop:5}}/>
+                                    require("../../img/bow.png")} alt="BOW" width="60" height="60" style={{marginTop:5}}/>
                         </div>
                     </Grid>
                     <Grid item>
                         {description}
                     </Grid>
                     <Grid item style={{ marginLeft: "15px" }}>
-                        {bought ? <div></div> : this.props.price}
+                        {selected ? <span className="upgrade-no-price">SELECTED</span> : 
+                        this.isBought() ? <span className="upgrade-no-price">BOUGHT</span> : this.props.price}
                     </Grid>
                 </Grid>
-                {bought ?
+                {this.isBought() ?
                     <div></div>
                     :
                     <UpgradeDialog

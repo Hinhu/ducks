@@ -5,6 +5,14 @@ class GameCanvas extends Component{
         super(props);
         this.GRAVITY = 0.420420;
         this.DUCKS_BASE_NUM = 4;
+        let bowPowerIncrease;
+        switch(localStorage.getItem('bowType')){
+            case "Turbo": bowPowerIncrease=1.875; break;
+            case "Super": bowPowerIncrease=2.25; break;
+            case "Ultra": bowPowerIncrease=2.625; break;
+            default: bowPowerIncrease=1.5;
+        }
+
         this.state = {
             backgroundColor: "green",
             width: 700,
@@ -21,7 +29,7 @@ class GameCanvas extends Component{
                 y: 300,
                 rotation: 0,
                 power: 0,
-                powerIncrease: 1.5,
+                powerIncrease: bowPowerIncrease,
                 isStretching: false,
             },
             arrows: []
@@ -132,22 +140,28 @@ class GameCanvas extends Component{
             case "city": this.backgroundImg.src = require("../../img/background-dark.png"); break;
             default: this.backgroundImg.src = require("../../img/background-grass.png"); break;
         }
+        switch(localStorage.getItem('bowType')){
+            case "Turbo": this.bowImg.src = require("../../img/turbo-bow.png"); break;
+            case "Super": this.bowImg.src = require("../../img/super-bow.png"); break;
+            case "Ultra": this.bowImg.src = require("../../img/ultra-bow.png"); break;
+            default: this.bowImg.src = require("../../img/bow.png");
+        }
         /* load images */
         this.duckImg.src = require("../../img/duck.png");
         this.bonusDuckImg.src = require("../../img/bonus-duck.png");
-        this.bowImg.src = require("../../img/bow.png");
+        //this.bowImg.src = require("../../img/bow.png");
         this.arrowImg.src = require("../../img/arrow.png");
         this.backgroundImg.onload = function() {
             context.clearRect(0,0,state.width, state.height);
             context.drawImage(this, 0, 0, state.width, state.height);
         };
-        this.duckImg.onload = function(){
+        /*this.duckImg.onload = function(){
             //context.clearRect(0,0,state.width, state.height);
             context.drawImage(this, state.width-100, 100);
-        };
-        this.bowImg.onload = function(){
+        };*/
+        /*this.bowImg.onload = function(){
             context.drawImage(this, 100, 100);
-        };
+        };*/
         /*this.arrowImg.onload = function(){
             context.drawImage(this, 200, 200);
         }*/
@@ -259,7 +273,7 @@ class GameCanvas extends Component{
     }
 
     calculateAngle(mouseY){
-        return Math.PI/24*39+mouseY/250;
+        return Math.PI/26*39+mouseY/180;
     }
 
     checkCollisions(arrow){
