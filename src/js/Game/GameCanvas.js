@@ -5,16 +5,7 @@ class GameCanvas extends Component{
         super(props);
         this.GRAVITY = 0.420420;
         this.DUCKS_BASE_NUM = 4;
-        let bowPowerIncrease;
-        switch(localStorage.getItem('bowType')){
-            case "Turbo": bowPowerIncrease=1.875; break;
-            case "Super": bowPowerIncrease=2.25; break;
-            case "Ultra": bowPowerIncrease=2.625; break;
-            default: bowPowerIncrease=1.5;
-        }
-
         this.state = {
-            backgroundColor: "green",
             width: 700,
             height: 420,
             isFinished: false,
@@ -29,7 +20,7 @@ class GameCanvas extends Component{
                 y: 300,
                 rotation: 0,
                 power: 0,
-                powerIncrease: bowPowerIncrease,
+                powerIncrease: this.getBowPowerIncrease(),
                 isStretching: false,
             },
             arrows: []
@@ -41,6 +32,7 @@ class GameCanvas extends Component{
         if(!initialState)
             this.startGame();
         else {
+            initialState.bow.powerIncrease = this.getBowPowerIncrease();
             this.setState(initialState);
             this.initImages(this.refs.canvas.getContext('2d'));
             this.startAnimation();
@@ -63,6 +55,15 @@ class GameCanvas extends Component{
         requestAnimationFrame(()=>{
             this.loop();
         });
+    }
+
+    getBowPowerIncrease(){
+        switch(localStorage.getItem('bowType')){
+            case "Turbo": return 1.875; 
+            case "Super": return 2.25; 
+            case "Ultra": return 2.625; 
+            default: return 1.5;
+        }
     }
 
     finishGame(){
@@ -105,11 +106,11 @@ class GameCanvas extends Component{
         let bonusDucksArray = [];
 
         /* create regular ducks */
-        for(let i=0; i<this.DUCKS_BASE_NUM+2*this.state.level; i++)
+        for(let i=0; i<this.DUCKS_BASE_NUM+this.state.level; i++)
             ducksArray.push({
                 x: this.state.width+(Math.random()*70+i*200+40*this.state.level),
                 y: (Math.random()*100+20),
-                speed: (Math.random()*0.05*this.state.level+0.2*this.state.level+1.2)
+                speed: (Math.random()*0.05*this.state.level+0.15*this.state.level+1.2)
             });
         
         /* create bonus ducks */
@@ -374,7 +375,8 @@ class GameCanvas extends Component{
         /* check if all ducks are dead or have flown away, so the level can be increased */
         if(this.state.ducks.concat(this.state.bonusDucks).filter(duck => duck.x > -100).length === 0){
             this.setState((state) => ({
-                level: state.level+1
+                level: state.level+1,
+                bonusPoints: state.bonusPoints+1
             }))
 
             /* create new ducks */

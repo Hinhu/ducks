@@ -19,7 +19,7 @@ class Upgrades extends Component {
 				<div id="title">
                     UPGRADES
                 </div>
-				<Upgrade type="Normal" speedUp="0" price="0" handleBuy={this.handleBuy}/>
+				<Upgrade type="Cedar" speedUp="0 " price="0" handleBuy={this.handleBuy}/>
 				<Upgrade type="Turbo" speedUp="25" price="100" handleBuy={this.handleBuy}/>
 				<Upgrade type="Super" speedUp="50" price="250" handleBuy={this.handleBuy}/>
 				<Upgrade type="Ultra" speedUp="75" price="500" handleBuy={this.handleBuy}/>
