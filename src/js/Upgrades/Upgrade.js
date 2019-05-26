@@ -10,16 +10,18 @@ class Upgrade extends Component {
         }
     }
 
-    isBougth = () => {
+    
+
+    isBought = () => {
         return localStorage.getItem(this.props.type) === "true";
     }
 
     handleClick = () => {
         let cash = parseInt(localStorage.getItem("cash"));
-        if (!this.isBougth() && cash > this.props.price) {
+        if (!this.isBought() && cash > this.props.price) {
             this.setState({ open: true });
         } else {
-            if (!this.isBougth()) {
+            if (!this.isBought()) {
                 alert("You don't have enough cash");
             }
         }
@@ -30,10 +32,10 @@ class Upgrade extends Component {
     }
 
     render() {
-        console.log(require("../../img/bow.png"));
+        //console.log(require("../../img/bow.png"));
         let description;
         let bought;
-        if (this.isBougth()) {
+        if (this.isBought()) {
             description = (<div className="upgrade-bought">BOUGHT</div>);
             bought = true;
         } else {
@@ -54,7 +56,10 @@ class Upgrade extends Component {
                 <Grid container direction="row" justify="center" alignItems="center" spacing={16} onClick={this.handleClick}>
                     <Grid item style={bought ? { marginLeft: "-76px" } : {}}>
                         <div className="box">
-                            <img src={require("../../img/bow.png")} alt="BOW" width="90" height="90" style={{marginTop:5}}/>
+                            <img src={this.props.type==='Turbo' ? require("../../img/turbo-bow.png") :
+                                    this.props.type==='Super' ? require("../../img/super-bow.png") :
+                                    this.props.type==='Ultra' ? require("../../img/ultra-bow.png") : 
+                                    require("../../img/bow.png")} alt="BOW" width="90" height="90" style={{marginTop:5}}/>
                         </div>
                     </Grid>
                     <Grid item>
