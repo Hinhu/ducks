@@ -35,6 +35,7 @@ class GameCanvas extends Component{
             initialState.bow.powerIncrease = this.getBowPowerIncrease();
             this.setState(initialState);
             this.initImages(this.refs.canvas.getContext('2d'));
+            this.initSounds();
             this.startAnimation();
         }
     }
@@ -45,8 +46,9 @@ class GameCanvas extends Component{
 
 
     startGame(){
-        this.initCanvas(this.refs.canvas.getContext('2d'));
+        this.initImages(this.refs.canvas.getContext('2d'));
         this.initDucks();
+        this.initSounds();
         this.startAnimation();
     }
 
@@ -126,6 +128,14 @@ class GameCanvas extends Component{
         })
     }
 
+    initSounds(){
+        this.duckHitSound = new Audio("audio/big-shaq-quack.wav");
+        this.levelUpSound = new Audio("audio/level-up.wav");
+        this.gameOverSound = new Audio("audio/game-over.wav");
+        
+        this.levelUpSound.play();
+    }
+
     initImages(context){
         let state = this.state;
         /* init images */
@@ -150,28 +160,11 @@ class GameCanvas extends Component{
         /* load images */
         this.duckImg.src = require("../../img/duck.png");
         this.bonusDuckImg.src = require("../../img/bonus-duck.png");
-        //this.bowImg.src = require("../../img/bow.png");
         this.arrowImg.src = require("../../img/arrow.png");
         this.backgroundImg.onload = function() {
             context.clearRect(0,0,state.width, state.height);
             context.drawImage(this, 0, 0, state.width, state.height);
         };
-        /*this.duckImg.onload = function(){
-            //context.clearRect(0,0,state.width, state.height);
-            context.drawImage(this, state.width-100, 100);
-        };*/
-        /*this.bowImg.onload = function(){
-            context.drawImage(this, 100, 100);
-        };*/
-        /*this.arrowImg.onload = function(){
-            context.drawImage(this, 200, 200);
-        }*/
-
-    }
-
-    initCanvas(context){
-        this.initImages(context);
-        console.log('init canvas');
     }
 
     updateCanvas(){
@@ -239,7 +232,6 @@ class GameCanvas extends Component{
         bow.power = 0;
         this.setState({bow});
         this.setState({arrows});
-        //console.log(this.state)
     }
 
     startStretching(event){
@@ -300,8 +292,14 @@ class GameCanvas extends Component{
         let deadBonusDucks = bonusDucks.length - aliveBonusDucks.length;
 
         /* update stats if something is shot */
-        if(deadDucks+deadBonusDucks>0)
+        if(deadDucks+deadBonusDucks>0){
             this.props.onPointsChange(this.state.score+deadDucks, this.state.bonusPoints+deadBonusDucks);
+
+            /* stop previous sound to play this */
+            this.duckHitSound.pause();
+            this.duckHitSound.currentTime = 0;
+            this.duckHitSound.play();
+        }
 
         this.setState((state) => ({
             ducks: aliveDucks,
@@ -363,8 +361,10 @@ class GameCanvas extends Component{
         const missedDucks = this.state.ducks.filter(duck => duck.x < -30).length
 
         /* check if player lost */
-        if(missedDucks === this.props.maxDucksMissed)
-            this.setState({isFinished: true})
+        if(missedDucks === this.props.maxDucksMissed){
+            this.setState({isFinished: true});
+            this.gameOverSound.play();
+        }
 
         /* update number of missed ducks */
         if(missedDucks !== this.state.missedDucks){
@@ -378,6 +378,9 @@ class GameCanvas extends Component{
                 level: state.level+1,
                 bonusPoints: state.bonusPoints+1
             }))
+
+            /* play level-up sound after a while*/
+            setTimeout(() => this.levelUpSound.play(), 800);
 
             /* create new ducks */
             this.initDucks(this.state);
@@ -399,8 +402,6 @@ class GameCanvas extends Component{
             this.finishGame();
     }
 
-
-
     render(){
         return (
             <canvas width={this.state.width} height={this.state.height} ref="canvas" 
@@ -409,7 +410,6 @@ class GameCanvas extends Component{
                     onMouseDown={this.handleMouseDown.bind(this)}></canvas>
         );
     }
-    
 }
 
 export default GameCanvas;
