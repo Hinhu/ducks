@@ -5,6 +5,8 @@ class GameCanvas extends Component{
         super(props);
         this.GRAVITY = 0.420420;
         this.DUCKS_BASE_NUM = 4;
+        this.MAX_ARROWS_IN_QUIVER = this.getMaxArrowsInQuiver();
+        this.RELOADING_STEP = 1.4;
         this.state = {
             width: 700,
             height: 420,
@@ -23,7 +25,10 @@ class GameCanvas extends Component{
                 powerIncrease: this.getBowPowerIncrease(),
                 isStretching: false,
             },
-            arrows: []
+            arrows: [],
+            arrowsInQuiver: this.MAX_ARROWS_IN_QUIVER,
+            isReloading: false,
+            reloadingValue: 0
         };
     }
 
@@ -65,6 +70,15 @@ class GameCanvas extends Component{
             case "Super": return 2.25; 
             case "Ultra": return 2.625; 
             default: return 1.5;
+        }
+    }
+
+    getMaxArrowsInQuiver(){
+        switch(localStorage.getItem('bowType')){
+            case "Turbo": return 6; 
+            case "Super": return 8; 
+            case "Ultra": return 10; 
+            default: return 5;
         }
     }
 
@@ -129,7 +143,7 @@ class GameCanvas extends Component{
     }
 
     initSounds(){
-        this.duckHitSound = new Audio("audio/big-shaq-quack.wav");
+        this.duckHitSound = new Audio("audio/big-shaq-quack_2.wav");
         this.levelUpSound = new Audio("audio/level-up.wav");
         this.gameOverSound = new Audio("audio/game-over.wav");
         
@@ -188,10 +202,17 @@ class GameCanvas extends Component{
             context.drawImage(this.bonusDuckImg, element.x, element.y);
         })
 
+        /* draw quiver */
+        this.drawQuiver(context);
+
         /* draw arrows */
         this.state.arrows.forEach(element => {
             this.drawArrow(context, element);
         })
+
+        /* draw reloading bar */
+        if(this.state.isReloading)
+            this.drawReloadingBar(context);
 
         /* draw power bar */
         if(this.state.bow.isStretching)
@@ -218,6 +239,10 @@ class GameCanvas extends Component{
     }
 
     releaseArrow(event){
+        /* ignore shooting when reloading */
+        if(this.state.arrowsInQuiver === 0)
+            return;
+
         let arrows = this.state.arrows;
         let bow = {...this.state.bow};
         let newArrow = {
@@ -232,9 +257,16 @@ class GameCanvas extends Component{
         bow.power = 0;
         this.setState({bow});
         this.setState({arrows});
+        this.setState(state => ({
+            arrowsInQuiver: state.arrowsInQuiver - 1
+        }));
     }
 
     startStretching(event){
+        /* ignore shooting when reloading */
+        if(this.state.arrowsInQuiver === 0)
+            return;
+
         let bow = {...this.state.bow};
         bow.isStretching = true;
         this.setState({bow});
@@ -256,6 +288,20 @@ class GameCanvas extends Component{
         context.translate(-arrow.x*1.0, -arrow.y);
         context.drawImage(this.arrowImg, arrow.x, arrow.y);
         context.restore();
+    }
+
+    drawQuiver(context){
+        for(let i=0; i<this.state.arrowsInQuiver; i++){
+            context.drawImage(this.arrowImg, 250+20*i, 350);
+        }
+    }
+
+    drawReloadingBar(context){
+        context.fillStyle = "#000000";
+        context.fillRect(250, 350, 100, 20);
+        context.fillStyle = "#0000FF";
+        context.fillRect(250, 350, this.state.reloadingValue, 20);
+        
     }
 
     drawPowerBar(context){
@@ -345,6 +391,28 @@ class GameCanvas extends Component{
 
         /* check collisions and update score */
         this.state.arrows.forEach(arrow => this.checkCollisions(arrow));
+
+        /* start reloading when quiver is empty */
+        if(this.state.arrowsInQuiver === 0 && !this.state.isReloading)
+            this.setState({
+                isReloading: true
+            });
+
+        /* update reloading bar */
+        if(this.state.isReloading){
+            this.setState(state => ({
+                reloadingValue: state.reloadingValue + this.RELOADING_STEP
+            }));
+        }
+
+        /* stop reloading if it's finished */
+        if(this.state.reloadingValue > 100){
+            this.setState({
+                isReloading: false,
+                reloadingValue: 0,
+                arrowsInQuiver: this.MAX_ARROWS_IN_QUIVER
+            });
+        }
 
         /* update power bar */
         if(this.state.bow.isStretching){
