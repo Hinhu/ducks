@@ -9,7 +9,6 @@ class Upgrade extends Component {
             open: false
         }
     }
-
     
 
     isBought = () => {
@@ -32,14 +31,7 @@ class Upgrade extends Component {
     }
 
     render() {
-        //console.log(require("../../img/bow.png"));
         let selected = localStorage.getItem('bowType') === this.props.type;
-        let description;
-        let bought;
-        //if (this.isBought()) {
-            //description = (/*<div className="upgrade-bought">BOUGHT</div>*/<div></div>);
-        //    bought = true;
-        //} else {
             description = (
                 <Grid container direction="column" justify="flex-start" spacing={0}>
                     <Grid item style={{ marginTop: "-20px" }}>
@@ -50,8 +42,7 @@ class Upgrade extends Component {
                     </Grid>
                 </Grid>
             );
-            //bought = false;
-        //}
+            
         return (
             <div className="upgrade">
                 <Grid container direction="row" justify="center" alignItems="center" spacing={16} onClick={this.handleClick}>

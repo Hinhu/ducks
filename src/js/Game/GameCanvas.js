@@ -147,7 +147,8 @@ class GameCanvas extends Component{
         this.levelUpSound = new Audio("audio/level-up.wav");
         this.gameOverSound = new Audio("audio/game-over.wav");
         
-        this.levelUpSound.play();
+        if(localStorage.getItem('sound') === 'active')
+            this.levelUpSound.play();
     }
 
     initImages(context){
@@ -217,18 +218,6 @@ class GameCanvas extends Component{
         /* draw power bar */
         if(this.state.bow.isStretching)
             this.drawPowerBar(context);
-    }
-
-    handleMouseMove(event){
-        this.rotateBow(event);
-    }
-
-    handleMouseUp(event){
-        this.releaseArrow(event);
-    }
-    
-    handleMouseDown(event){
-        this.startStretching(event);
     }
 
     /* get bow rotation from mouse Y-position */
@@ -342,9 +331,11 @@ class GameCanvas extends Component{
             this.props.onPointsChange(this.state.score+deadDucks, this.state.bonusPoints+deadBonusDucks);
 
             /* stop previous sound to play this */
-            this.duckHitSound.pause();
-            this.duckHitSound.currentTime = 0;
-            this.duckHitSound.play();
+            if(localStorage.getItem('sound') === 'active'){
+                this.duckHitSound.pause();
+                this.duckHitSound.currentTime = 0;
+                this.duckHitSound.play();
+            }
         }
 
         this.setState((state) => ({
@@ -431,7 +422,8 @@ class GameCanvas extends Component{
         /* check if player lost */
         if(missedDucks === this.props.maxDucksMissed){
             this.setState({isFinished: true});
-            this.gameOverSound.play();
+            if(localStorage.getItem('sound') === 'active')
+                this.gameOverSound.play();
         }
 
         /* update number of missed ducks */
@@ -448,18 +440,14 @@ class GameCanvas extends Component{
             }))
 
             /* play level-up sound after a while*/
-            setTimeout(() => this.levelUpSound.play(), 800);
+            if(localStorage.getItem('sound') === 'active')
+                setTimeout(() => this.levelUpSound.play(), 800);
 
             /* create new ducks */
             this.initDucks(this.state);
 
             /* update level stat */
             this.props.onLevelUp(this.state.level);
-
-            /* debug */
-            console.log('leveled up', this.state.level);
-            console.log('score', this.state.score);
-            console.log('bonus points', this.state.bonusPoints);
         }
 
         /* animate only if player hasn't lost */
@@ -468,6 +456,20 @@ class GameCanvas extends Component{
         }
         else 
             this.finishGame();
+    }
+
+
+    /* mouse events */
+    handleMouseMove(event){
+        this.rotateBow(event);
+    }
+
+    handleMouseUp(event){
+        this.releaseArrow(event);
+    }
+    
+    handleMouseDown(event){
+        this.startStretching(event);
     }
 
     render(){
