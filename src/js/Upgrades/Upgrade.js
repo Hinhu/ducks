@@ -9,6 +9,7 @@ class Upgrade extends Component {
             open: false
         }
     }
+
     
 
     isBought = () => {
@@ -31,8 +32,9 @@ class Upgrade extends Component {
     }
 
     render() {
-        let selected = localStorage.getItem('bowType') === this.props.type;
-            description = (
+        //console.log(require("../../img/bow.png"));
+        let selected = localStorage.getItem('bowType') === this.props.type;  
+            let description = (
                 <Grid container direction="column" justify="flex-start" spacing={0}>
                     <Grid item style={{ marginTop: "-20px" }}>
                         <span className="upgrade-title">{this.props.type} Bow</span>
