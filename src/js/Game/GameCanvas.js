@@ -5,6 +5,8 @@ class GameCanvas extends Component{
         super(props);
         this.GRAVITY = 0.420420;
         this.DUCKS_BASE_NUM = 4;
+        this.MAX_ARROWS_IN_QUIVER = this.getMaxArrowsInQuiver();
+        this.RELOADING_STEP = 1.4;
         this.state = {
             width: 700,
             height: 420,
@@ -23,7 +25,10 @@ class GameCanvas extends Component{
                 powerIncrease: this.getBowPowerIncrease(),
                 isStretching: false,
             },
-            arrows: []
+            arrows: [],
+            arrowsInQuiver: this.MAX_ARROWS_IN_QUIVER,
+            isReloading: false,
+            reloadingValue: 0
         };
     }
 
@@ -35,6 +40,7 @@ class GameCanvas extends Component{
             initialState.bow.powerIncrease = this.getBowPowerIncrease();
             this.setState(initialState);
             this.initImages(this.refs.canvas.getContext('2d'));
+            this.initSounds();
             this.startAnimation();
         }
     }
@@ -45,8 +51,9 @@ class GameCanvas extends Component{
 
 
     startGame(){
-        this.initCanvas(this.refs.canvas.getContext('2d'));
+        this.initImages(this.refs.canvas.getContext('2d'));
         this.initDucks();
+        this.initSounds();
         this.startAnimation();
     }
 
@@ -63,6 +70,15 @@ class GameCanvas extends Component{
             case "Super": return 2.25; 
             case "Ultra": return 2.625; 
             default: return 1.5;
+        }
+    }
+
+    getMaxArrowsInQuiver(){
+        switch(localStorage.getItem('bowType')){
+            case "Turbo": return 6; 
+            case "Super": return 8; 
+            case "Ultra": return 10; 
+            default: return 5;
         }
     }
 
@@ -126,6 +142,15 @@ class GameCanvas extends Component{
         })
     }
 
+    initSounds(){
+        this.duckHitSound = new Audio("audio/big-shaq-quack_2.wav");
+        this.levelUpSound = new Audio("audio/level-up.wav");
+        this.gameOverSound = new Audio("audio/game-over.wav");
+        
+        if(localStorage.getItem('sound') === 'active')
+            this.levelUpSound.play();
+    }
+
     initImages(context){
         let state = this.state;
         /* init images */
@@ -137,8 +162,8 @@ class GameCanvas extends Component{
 
         /* get background from settings */
         switch(localStorage.getItem("map")) {
-            case "lake": this.backgroundImg.src = require("../../img/background-beach.png"); break;
-            case "city": this.backgroundImg.src = require("../../img/background-dark.png"); break;
+            case "beach": this.backgroundImg.src = require("../../img/background-beach.png"); break;
+            case "dark": this.backgroundImg.src = require("../../img/background-dark.png"); break;
             default: this.backgroundImg.src = require("../../img/background-grass.png"); break;
         }
         switch(localStorage.getItem('bowType')){
@@ -150,28 +175,11 @@ class GameCanvas extends Component{
         /* load images */
         this.duckImg.src = require("../../img/duck.png");
         this.bonusDuckImg.src = require("../../img/bonus-duck.png");
-        //this.bowImg.src = require("../../img/bow.png");
         this.arrowImg.src = require("../../img/arrow.png");
         this.backgroundImg.onload = function() {
             context.clearRect(0,0,state.width, state.height);
             context.drawImage(this, 0, 0, state.width, state.height);
         };
-        /*this.duckImg.onload = function(){
-            //context.clearRect(0,0,state.width, state.height);
-            context.drawImage(this, state.width-100, 100);
-        };*/
-        /*this.bowImg.onload = function(){
-            context.drawImage(this, 100, 100);
-        };*/
-        /*this.arrowImg.onload = function(){
-            context.drawImage(this, 200, 200);
-        }*/
-
-    }
-
-    initCanvas(context){
-        this.initImages(context);
-        console.log('init canvas');
     }
 
     updateCanvas(){
@@ -195,26 +203,21 @@ class GameCanvas extends Component{
             context.drawImage(this.bonusDuckImg, element.x, element.y);
         })
 
+        /* draw quiver */
+        this.drawQuiver(context);
+
         /* draw arrows */
         this.state.arrows.forEach(element => {
             this.drawArrow(context, element);
         })
 
+        /* draw reloading bar */
+        if(this.state.isReloading)
+            this.drawReloadingBar(context);
+
         /* draw power bar */
         if(this.state.bow.isStretching)
             this.drawPowerBar(context);
-    }
-
-    handleMouseMove(event){
-        this.rotateBow(event);
-    }
-
-    handleMouseUp(event){
-        this.releaseArrow(event);
-    }
-    
-    handleMouseDown(event){
-        this.startStretching(event);
     }
 
     /* get bow rotation from mouse Y-position */
@@ -225,6 +228,10 @@ class GameCanvas extends Component{
     }
 
     releaseArrow(event){
+        /* ignore shooting when reloading */
+        if(this.state.arrowsInQuiver === 0)
+            return;
+
         let arrows = this.state.arrows;
         let bow = {...this.state.bow};
         let newArrow = {
@@ -239,10 +246,16 @@ class GameCanvas extends Component{
         bow.power = 0;
         this.setState({bow});
         this.setState({arrows});
-        //console.log(this.state)
+        this.setState(state => ({
+            arrowsInQuiver: state.arrowsInQuiver - 1
+        }));
     }
 
     startStretching(event){
+        /* ignore shooting when reloading */
+        if(this.state.arrowsInQuiver === 0)
+            return;
+
         let bow = {...this.state.bow};
         bow.isStretching = true;
         this.setState({bow});
@@ -264,6 +277,20 @@ class GameCanvas extends Component{
         context.translate(-arrow.x*1.0, -arrow.y);
         context.drawImage(this.arrowImg, arrow.x, arrow.y);
         context.restore();
+    }
+
+    drawQuiver(context){
+        for(let i=0; i<this.state.arrowsInQuiver; i++){
+            context.drawImage(this.arrowImg, 250+20*i, 350);
+        }
+    }
+
+    drawReloadingBar(context){
+        context.fillStyle = "#000000";
+        context.fillRect(250, 350, 100, 20);
+        context.fillStyle = "#0000FF";
+        context.fillRect(250, 350, this.state.reloadingValue, 20);
+        
     }
 
     drawPowerBar(context){
@@ -300,8 +327,16 @@ class GameCanvas extends Component{
         let deadBonusDucks = bonusDucks.length - aliveBonusDucks.length;
 
         /* update stats if something is shot */
-        if(deadDucks+deadBonusDucks>0)
+        if(deadDucks+deadBonusDucks>0){
             this.props.onPointsChange(this.state.score+deadDucks, this.state.bonusPoints+deadBonusDucks);
+
+            /* stop previous sound to play this */
+            if(localStorage.getItem('sound') === 'active'){
+                this.duckHitSound.pause();
+                this.duckHitSound.currentTime = 0;
+                this.duckHitSound.play();
+            }
+        }
 
         this.setState((state) => ({
             ducks: aliveDucks,
@@ -348,6 +383,28 @@ class GameCanvas extends Component{
         /* check collisions and update score */
         this.state.arrows.forEach(arrow => this.checkCollisions(arrow));
 
+        /* start reloading when quiver is empty */
+        if(this.state.arrowsInQuiver === 0 && !this.state.isReloading)
+            this.setState({
+                isReloading: true
+            });
+
+        /* update reloading bar */
+        if(this.state.isReloading){
+            this.setState(state => ({
+                reloadingValue: state.reloadingValue + this.RELOADING_STEP
+            }));
+        }
+
+        /* stop reloading if it's finished */
+        if(this.state.reloadingValue > 100){
+            this.setState({
+                isReloading: false,
+                reloadingValue: 0,
+                arrowsInQuiver: this.MAX_ARROWS_IN_QUIVER
+            });
+        }
+
         /* update power bar */
         if(this.state.bow.isStretching){
             let bow = {...this.state.bow};
@@ -363,8 +420,11 @@ class GameCanvas extends Component{
         const missedDucks = this.state.ducks.filter(duck => duck.x < -30).length
 
         /* check if player lost */
-        if(missedDucks === this.props.maxDucksMissed)
-            this.setState({isFinished: true})
+        if(missedDucks === this.props.maxDucksMissed){
+            this.setState({isFinished: true});
+            if(localStorage.getItem('sound') === 'active')
+                this.gameOverSound.play();
+        }
 
         /* update number of missed ducks */
         if(missedDucks !== this.state.missedDucks){
@@ -379,16 +439,15 @@ class GameCanvas extends Component{
                 bonusPoints: state.bonusPoints+1
             }))
 
+            /* play level-up sound after a while*/
+            if(localStorage.getItem('sound') === 'active')
+                setTimeout(() => this.levelUpSound.play(), 800);
+
             /* create new ducks */
             this.initDucks(this.state);
 
             /* update level stat */
             this.props.onLevelUp(this.state.level);
-
-            /* debug */
-            console.log('leveled up', this.state.level);
-            console.log('score', this.state.score);
-            console.log('bonus points', this.state.bonusPoints);
         }
 
         /* animate only if player hasn't lost */
@@ -400,6 +459,18 @@ class GameCanvas extends Component{
     }
 
 
+    /* mouse events */
+    handleMouseMove(event){
+        this.rotateBow(event);
+    }
+
+    handleMouseUp(event){
+        this.releaseArrow(event);
+    }
+    
+    handleMouseDown(event){
+        this.startStretching(event);
+    }
 
     render(){
         return (
@@ -409,7 +480,6 @@ class GameCanvas extends Component{
                     onMouseDown={this.handleMouseDown.bind(this)}></canvas>
         );
     }
-    
 }
 
 export default GameCanvas;

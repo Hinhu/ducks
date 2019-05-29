@@ -32,18 +32,19 @@ class Upgrade extends Component {
     }
 
     render() {
-        let selected = localStorage.getItem('bowType') === this.props.type;
-        let description;
-        description = (
-            <Grid container direction="column" justify="flex-start" spacing={0}>
-                <Grid item style={{ marginTop: "-20px" }}>
-                    <span className="upgrade-title">{this.props.type} Bow</span>
+        //console.log(require("../../img/bow.png"));
+        let selected = localStorage.getItem('bowType') === this.props.type;  
+            let description = (
+                <Grid container direction="column" justify="flex-start" spacing={0}>
+                    <Grid item style={{ marginTop: "-20px" }}>
+                        <span className="upgrade-title">{this.props.type} Bow</span>
+                    </Grid>
+                    <Grid item style={{ marginTop: "-20px" }}>
+                        <span className="upgrade-description">{this.props.speedUp}% stretching speed up</span>
+                    </Grid>
                 </Grid>
-                <Grid item style={{ marginTop: "-20px" }}>
-                    <span className="upgrade-description">{this.props.speedUp}% stretching speed up</span>
-                </Grid>
-            </Grid>
-        );
+            );
+            
         return (
             <div className="upgrade">
                 <Grid container direction="row" justify="center" alignItems="center" spacing={16} onClick={this.handleClick}>
