@@ -162,8 +162,8 @@ class GameCanvas extends Component{
 
         /* get background from settings */
         switch(localStorage.getItem("map")) {
-            case "lake": this.backgroundImg.src = require("../../img/background-beach.png"); break;
-            case "city": this.backgroundImg.src = require("../../img/background-dark.png"); break;
+            case "beach": this.backgroundImg.src = require("../../img/background-beach.png"); break;
+            case "dark": this.backgroundImg.src = require("../../img/background-dark.png"); break;
             default: this.backgroundImg.src = require("../../img/background-grass.png"); break;
         }
         switch(localStorage.getItem('bowType')){

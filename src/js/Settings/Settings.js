@@ -12,12 +12,12 @@ class Settings extends Component {
 		super(props);
 		this.state = {
 			sound: localStorage.getItem("sound") || 'active',
-			map: localStorage.getItem("map") || 'forest',
+			map: localStorage.getItem("map") || 'grass',
 			openChangeNameDialog: false,
 			openResetRankingDialog: false,
 			openDeleteSaveDialog: false
 		}
-		this.maps = ['forest', 'lake', 'city']
+		this.maps = ['grass', 'dark', 'beach']
 	}
 
 	handleSound = () => {
