@@ -11,6 +11,7 @@ class Upgrades extends Component {
 		localStorage.setItem("bowType", type);
 		this.forceUpdate();
 	}
+	
 	render() {
 		return (
 			<div>

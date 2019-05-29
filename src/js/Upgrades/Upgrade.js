@@ -10,7 +10,7 @@ class Upgrade extends Component {
         }
     }
 
-    
+
 
     isBought = () => {
         return localStorage.getItem(this.props.type) === "true";
@@ -20,9 +20,9 @@ class Upgrade extends Component {
         let cash = parseInt(localStorage.getItem("cash"));
         if (!this.isBought() && cash > this.props.price) {
             this.setState({ open: true });
-        } else if (!this.isBought()) 
-                alert("You don't have enough cash");
-        else{
+        } else if (!this.isBought())
+            alert("You don't have enough cash");
+        else {
             this.props.handleBuy(this.props.type);
         }
     }
@@ -32,48 +32,38 @@ class Upgrade extends Component {
     }
 
     render() {
-        //console.log(require("../../img/bow.png"));
         let selected = localStorage.getItem('bowType') === this.props.type;
         let description;
-        let bought;
-        //if (this.isBought()) {
-            //description = (/*<div className="upgrade-bought">BOUGHT</div>*/<div></div>);
-        //    bought = true;
-        //} else {
-            description = (
-                <Grid container direction="column" justify="flex-start" spacing={0}>
-                    <Grid item style={{ marginTop: "-20px" }}>
-                        <span className="upgrade-title">{this.props.type} Bow</span>
-                    </Grid>
-                    <Grid item style={{ marginTop: "-20px" }}>
-                        <span className="upgrade-description">{this.props.speedUp}% stretching speed up</span>
-                    </Grid>
+        description = (
+            <Grid container direction="column" justify="flex-start" spacing={0}>
+                <Grid item style={{ marginTop: "-20px" }}>
+                    <span className="upgrade-title">{this.props.type} Bow</span>
                 </Grid>
-            );
-            //bought = false;
-        //}
+                <Grid item style={{ marginTop: "-20px" }}>
+                    <span className="upgrade-description">{this.props.speedUp}% stretching speed up</span>
+                </Grid>
+            </Grid>
+        );
         return (
             <div className="upgrade">
                 <Grid container direction="row" justify="center" alignItems="center" spacing={16} onClick={this.handleClick}>
                     <Grid item style={selected ? { marginLeft: "48px" } : {}}>
                         <div className="box">
-                            <img src={this.props.type==='Turbo' ? require("../../img/turbo-bow.png") :
-                                    this.props.type==='Super' ? require("../../img/super-bow.png") :
-                                    this.props.type==='Ultra' ? require("../../img/ultra-bow.png") : 
-                                    require("../../img/bow.png")} alt="BOW" width="60" height="60" style={{marginTop:5}}/>
+                            <img src={this.props.type === 'Turbo' ? require("../../img/turbo-bow.png") :
+                                this.props.type === 'Super' ? require("../../img/super-bow.png") :
+                                    this.props.type === 'Ultra' ? require("../../img/ultra-bow.png") :
+                                        require("../../img/bow.png")} alt="BOW" width="60" height="60" style={{ marginTop: 5 }} />
                         </div>
                     </Grid>
                     <Grid item>
                         {description}
                     </Grid>
                     <Grid item style={{ marginLeft: "15px" }}>
-                        {selected ? <span className="upgrade-no-price">SELECTED</span> : 
-                        this.isBought() ? <span className="upgrade-no-price">BOUGHT</span> : this.props.price}
+                        {selected ? <span className="upgrade-no-price">SELECTED</span> :
+                            this.isBought() ? <span className="upgrade-no-price">BOUGHT</span> : this.props.price}
                     </Grid>
                 </Grid>
-                {this.isBought() ?
-                    <div></div>
-                    :
+                {!this.isBought() &&
                     <UpgradeDialog
                         type={this.props.type}
                         price={this.props.price}

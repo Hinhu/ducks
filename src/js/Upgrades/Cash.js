@@ -1,14 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Cash extends Component {
-
-    render() {
+export default () => {
         return (
             <div id="cash" >
                 Cash: {localStorage.getItem('cash')}
             </div>
         );
     }
-}
-
-export default Cash;

@@ -27,9 +27,11 @@ class Ranking extends Component {
             	</div>
 				<div className="center">
 					<table className="center">
-						{this.ranks.map((rank, i) => (
-							<Rank number={i+1} name={rank.name} score={rank.score} key={i} />
-						))}
+						<tbody>
+							{this.ranks.map((rank, i) => (
+								<Rank number={i + 1} name={rank.name} score={rank.score} key={i} />
+							))}
+						</tbody>
 					</table>
 					<Back />
 				</div>

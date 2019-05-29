@@ -1,21 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Rank extends Component {
-	render() {
-		return (
-			<tr className="margin">
-				<td>
-					{this.props.number+'.'}
-				</td>
-				<td>
-					{this.props.name}
-				</td>
-				<td>
-					{this.props.score}
-				</td>
-			</tr>
-		);
-	}
+export default (props) => {
+	return (
+		<tr className="margin">
+			<td>
+				{props.number + '.'}
+			</td>
+			<td>
+				{props.name}
+			</td>
+			<td>
+				{props.score}
+			</td>
+		</tr>
+	);
 }
-
-export default Rank;

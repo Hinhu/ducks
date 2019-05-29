@@ -11,6 +11,8 @@ class DeleteSaveDialog extends Component {
         localStorage.removeItem("Super");
         localStorage.removeItem("Ultra");
         localStorage.setItem("cash",0);
+        localStorage.setItem('Cedar', true);
+        localStorage.setItem('bowType', "Cedar");
         this.props.handleClose();
     }
 

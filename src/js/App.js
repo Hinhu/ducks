@@ -16,8 +16,12 @@ class App extends Component {
 		if(!localStorage.getItem('cash')){
 			localStorage.setItem('cash',0)
 		}
-		localStorage.setItem('Cedar', true);
-		localStorage.setItem('bowType', "Cedar");
+		if(!localStorage.getItem('Cedar')){
+			localStorage.setItem('Cedar', true);
+		}
+		if(!localStorage.getItem('bowType')){
+			localStorage.setItem('bowType', "Cedar");
+		}
 		//if(!localStorage.getItem('gameState'))
 		localStorage.setItem('gameState', null);
 	}
